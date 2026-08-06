@@ -134,7 +134,7 @@
 ## 📊 GitHub Stats
 
 <p align="center">
-  <img src="https://github-readme-stats-beige-zeta-98.vercel.app/api?username=Shivala-08&show_icons=true&hide_border=true&count_private=true&hide_rank=true&theme=dracula" alt="GitHub Stats" width="49%"/>
+  <img src="https://github-readme-stats-beige-zeta-98.vercel.app/api?username=Shivala-08&show_icons=true&hide_border=true&count_private=true&hide_rank=true&theme=tokyonight" alt="GitHub Stats" width="49%"/>
   <img src="https://github-readme-streak-stats.herokuapp.com/?user=Shivala-08&hide_border=true&theme=dark" alt="GitHub Streak" width="49%"/>
 </p>
 
@@ -143,7 +143,7 @@
 ## 🏆 Top Languages
 
 <p align="center">
-  <img src="https://github-readme-stats-beige-zeta-98.vercel.app/api/top-langs/?username=Shivala-08&layout=compact&hide_border=true&hide=cmake,shaderlab&theme=dracula" alt="Top Languages" width="50%"/>
+  <img src="https://github-readme-stats-beige-zeta-98.vercel.app/api/top-langs/?username=Shivala-08&layout=compact&hide_border=true&hide=cmake,shaderlab&theme=tokyonight" alt="Top Languages" width="50%"/>
 </p>
 
 ---
