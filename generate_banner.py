@@ -71,7 +71,7 @@ PERSONAL_INFO = {
     "username": "Shivala-08",
     "role": "AI/ML Engineer • Full-Stack Developer",
     "origin": "Pune, India",
-    "education": "B.Tech CSE (AI & ML)",
+    "education": "B.Tech CSE (AI &amp; ML)",
     "status": "Building + Learning + Shipping",
     "toolchain": "VS Code, Git, Docker, ngrok",
     "languages": "Python, JavaScript, TypeScript, SQL",
