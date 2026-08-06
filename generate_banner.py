@@ -146,8 +146,8 @@ def segment_background(img_array):
     blurred = ndimage.gaussian_filter(img_array.astype(float), sigma=3)
     # Background in the prompt's portrait image is usually lighter/darker than subject
     # Standard thresholding
-    threshold = 120
-    mask = blurred > threshold
+    threshold = 155
+    mask = blurred < threshold
     
     mask = ndimage.binary_closing(mask, iterations=2)
     mask = ndimage.binary_fill_holes(mask)
