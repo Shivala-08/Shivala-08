@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Omnitrix OS",
+    "repo": "Shivala-08/ben-10-os",
+    "description": "An immersive, interactive Ben 10 Omnitrix OS interface built with Next.js and Three.js.",
+    "tags": ["NextJS", "React", "GSAP"]
+  },
+  {
+    "name": "CineVault",
+    "repo": "Shivala-08/cinevault",
+    "description": "A cinematic movie discovery & watchlist app built with Vanilla JS and OMDb API.",
+    "tags": ["VanillaJS", "CSS", "OMDb API"]
+  },
+  {
+    "name": "Deploy Forge",
+    "repo": "Shivala-08/deploy-forge",
+    "description": "A lightweight CI/CD utility to automate Docker deployments on Linux.",
+    "tags": ["Docker", "Bash", "Python"]
+  },
+  {
+    "name": "Udhaar Ledger",
+    "repo": "Shivala-08/udhaar-ledger",
+    "description": "A double-entry ledger bookkeeping app for local business transaction tracking.",
+    "tags": ["React", "FastAPI", "Supabase"]
+  }
+]
