@@ -93,17 +93,23 @@
 ### 🎬 Omnitrix OS
 > A futuristic OS-inspired interface with cyberpunk aesthetics
 
-[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Shivala-08)
-[![Live](https://img.shields.io/badge/LIVE-00D26A?style=for-the-badge&logo=vercel&logoColor=white)](#)
+![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white) ![React](https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=react&logoColor=black) ![Tailwind](https://img.shields.io/badge/Tailwind-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)
+
+![Stars](https://img.shields.io/github/stars/Shivala-08?style=flat-square&color=FFD700) ![Forks](https://img.shields.io/github/forks/Shivala-08?style=flat-square&color=00D26A)
+
+[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Shivala-08) [![Live](https://img.shields.io/badge/LIVE-00D26A?style=for-the-badge&logo=vercel&logoColor=white)](#)
 
 </td>
 <td width="50%">
 
 ### 🎥 CineVault
-> Your personal movie collection manager
+> Your personal movie collection manager with AI recommendations
 
-[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Shivala-08)
-[![Live](https://img.shields.io/badge/LIVE-00D26A?style=for-the-badge&logo=vercel&logoColor=white)](#)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black) ![Next.js](https://img.shields.io/badge/Next.js-000000?style=flat-square&logo=next.js&logoColor=white) ![Supabase](https://img.shields.io/badge/Supabase-3FCF8E?style=flat-square&logo=supabase&logoColor=white)
+
+![Stars](https://img.shields.io/github/stars/Shivala-08?style=flat-square&color=FFD700) ![Forks](https://img.shields.io/github/forks/Shivala-08?style=flat-square&color=00D26A)
+
+[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Shivala-08) [![Live](https://img.shields.io/badge/LIVE-00D26A?style=for-the-badge&logo=vercel&logoColor=white)](#)
 
 </td>
 </tr>
@@ -113,8 +119,11 @@
 ### 🚀 Deploy Forge
 > One-click deployment toolkit for modern web apps
 
-[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Shivala-08)
-[![Live](https://img.shields.io/badge/LIVE-00D26A?style=for-the-badge&logo=vercel&logoColor=white)](#)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white) ![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white) ![Vercel](https://img.shields.io/badge/Vercel-000000?style=flat-square&logo=vercel&logoColor=white)
+
+![Stars](https://img.shields.io/github/stars/Shivala-08?style=flat-square&color=FFD700) ![Forks](https://img.shields.io/github/forks/Shivala-08?style=flat-square&color=00D26A)
+
+[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Shivala-08) [![Live](https://img.shields.io/badge/LIVE-00D26A?style=for-the-badge&logo=vercel&logoColor=white)](#)
 
 </td>
 <td width="50%">
@@ -122,8 +131,11 @@
 ### 💰 Udhaar Ledger
 > Digital ledger for tracking debts and payments
 
-[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Shivala-08)
-[![Live](https://img.shields.io/badge/LIVE-00D26A?style=for-the-badge&logo=vercel&logoColor=white)](#)
+![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white) ![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white)
+
+![Stars](https://img.shields.io/github/stars/Shivala-08?style=flat-square&color=FFD700) ![Forks](https://img.shields.io/github/forks/Shivala-08?style=flat-square&color=00D26A)
+
+[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Shivala-08) [![Live](https://img.shields.io/badge/LIVE-00D26A?style=for-the-badge&logo=vercel&logoColor=white)](#)
 
 </td>
 </tr>
