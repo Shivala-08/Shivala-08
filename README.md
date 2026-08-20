@@ -13,244 +13,231 @@
 
 </div>
 
-<br/>
+<br>
 
-<div align="center">
+<h2 align="center">AI/ML Engineer · Systems Builder</h2>
 
-🟢 **OPEN TO SOFTWARE / AI/ML INTERNSHIPS**
+<p align="center">
+  Curious enough to learn anything.<br>
+  Disciplined enough to ship.
+</p>
 
-[**📁 VIEW PROJECTS**](#-featured-deploy-forge) &nbsp;•&nbsp; [**✉️ CONTACT ME**](#-lets-build)
+<p align="center">
+  🟢 <strong>OPEN TO SOFTWARE ENGINEERING / AI/ML INTERNSHIPS</strong>
+</p>
 
-</div>
+<p align="center">
+  <a href="mailto:pallavdholariya@gmail.com?subject=Resume Request">Resume</a> ·
+  <a href="https://www.linkedin.com/in/pallavdholariya/">LinkedIn</a> ·
+  <a href="mailto:pallavdholariya@gmail.com">Email</a> ·
+  <a href="https://pallav-os.vercel.app">Portfolio</a>
+</p>
 
-<br/>
-
----
-
-## Engineering Profile
-
-I build at the intersection of AI, systems, and product engineering. I learn by building systems that force me to understand what is happening underneath.
-
-<div align="center">
-
-| 🧠 **AI / ML** | ⚙️ **SYSTEMS** | 📦 **PRODUCT** | ⚡ **PERFORMANCE** |
-| :--- | :--- | :--- | :--- |
-| • RAG pipelines<br/>• Intelligent agents<br/>• LLM orchestration | • High-throughput APIs<br/>• Custom CI/CD pipelines<br/>• Isolated build workers | • Full-stack architecture<br/>• Developer utilities<br/>• Observability logs | • Custom WebGL renderers<br/>• JavaScript bundle optimization<br/>• 60+ FPS animations |
-
-</div>
-
-<br/>
+<br>
 
 ---
 
-## Currently Building
+## 🔨 Currently Building
 
-🧠 **Synapse** (Status: `🟡 ACTIVE DEVELOPMENT`)
-AI RAG engine exploring retrieval routing, confidence scoring, and knowledge graph augmentation.
+| Project | Focus |
+|---|---|
+| 🧠 Synapse | AI / retrieval / experimentation |
+| 🚀 Deploy Forge | Git-backed deployment infrastructure |
+| 🌐 The Skynet | Custom WebGL + performance engineering |
 
-⚙️ **Deploy Forge** (Status: `🟢 PRODUCTION`)
-Self-hosted deployment infrastructure. Next engineering challenge: build artifact caching & rollback support.
+> Building → measuring → breaking → fixing → shipping.
 
-🧪 **AI Systems** (Status: `🔵 EXPERIMENTAL`)
-Evaluating agent-based code translation and LLM-powered developer productivity loops.
-
-<br/>
-
----
-
-## Engineering Receipts
-
-Real, verifiable performance results extracted directly from production builds:
-
-| Project | Engineering Result | Verification / Source |
-|---|---|---|
-| **The Skynet** | `883 KB` → `24.9 KB` JS bundle size | Replaced three.js with custom WebGL |
-| **The Skynet** | `98 - 99` Lighthouse Performance | Committed Lighthouse CI baseline |
-| **The Skynet** | Custom WebGL shader picking | Raycast hit-testing mapped directly to GPU |
-| **Deploy Forge** | `~15s` production build time | Tested locally on NextJS app deploys |
-| **Deploy Forge** | Automated framework detection | Pydantic parser matches manifest to build profiles |
-| **Synapse** | `207 ms` query latency (LLM-disabled) | Deterministic semantic retrieval routing |
-| **Synapse** | `62.5%` Retrieval Accuracy | 40-question ablation ground-truth run |
-
-<br/>
+<br>
 
 ---
 
-## 🚀 Featured: Deploy Forge
+## 📊 Measured Results
 
-### The Problem
-Deploying static projects manually meant executing a repetitive loop: clone → build → copy → commit → push. Traditional serverless environments (like Vercel API routes) cannot run arbitrary package builds due to execution timeouts and read-only environments.
+| Project | Measurement | Result |
+|---|---|---:|
+| The Skynet | 3D renderer bundle | **883 KB → 24.9 KB** |
+| Deploy Forge | Local production build | **~15s** |
+| Synapse | Retrieval benchmark | **62.5% Accuracy** |
 
-### What I Built
-A Git-backed deployment platform that takes a GitHub repository URL and compiles it to a live static site through an automated, isolated build pipeline.
+* Synapse evaluation: 62.5% retrieval accuracy, 0.875 Recall@5, 0.667 MRR, and 207 ms query latency on a 40-question ground-truth dataset (LLM-disabled, local SentenceTransformer sandbox).
 
-### Architecture
+<br>
+
+---
+
+## 🚀 Featured: Deploy Forge — Git-Backed Deployment Infrastructure
+
+### Why I Built It
+I got tired of repeating the manual compile loop: `clone` → `install` → `build` → `copy` → `commit` → `push` → `deploy` for static site prototypes. Traditional serverless applications (like Next.js deployed on Vercel) have read-only filesystems and runtimes that cannot compile arbitrary code. I built Deploy Forge to move this process out of the application request lifecycle.
+
+### Pipeline Flow
 ```text
-           GitHub Repository
-                   │
-                   ▼
-             [Deploy Forge]
-                   │
-                   ▼
-         [Framework Detection]
-                   │
-                   ▼
-           [GitHub Actions]
-                   │ (npm install & build)
-                   ▼
-           [Asset Processing]
-                   │ (sed path-rewriter)
-                   ▼
-         [Git-Backed Output Push]
-                   │
-                   ▼
-                [Vercel]
-                   │ (auto-redeployment)
-                   ▼
-               Live Site
+GitHub Repository
+       │
+       ▼
+[Deploy Forge API] ──(repository_dispatch)──► [GitHub Actions Runner]
+                                                       │
+                                                       ▼
+                                            [Isolated Build Zone]
+                                            - Clone external repo
+                                            - npm install && npm build
+                                                       │
+                                                       ▼
+                                            [Path Rewriter Script]
+                                            - sed absolute URLs
+                                                       │
+                                                       ▼
+                                            [Git Commit & Push Back]
+                                                       │
+                                                       ▼
+                                            [Vercel Auto-Redeploy]
+                                                       │
+                                                       ▼
+                                                   Live URL
 ```
 
-### Engineering Challenges
-* **Execution Isolation:** Offloaded builds to GitHub Actions runner to protect the Next.js serverless app from long-running build timeouts.
-* **Asset Subpath Rewriting:** Running sites on dynamic subpaths (`/sites/{id}/`) breaks absolute asset links. Built a custom path-rewriter using regex mapping:
-  `sed -i "s|href=\"/|href=\"/sites/{id}/|g"` across all generated assets.
-* **Git-Backed Artifacts:** Pushing built artifacts back to the main branch triggers Vercel auto-deployment, using Git as both a deployment primitive and revision history.
+### Engineering Challenges & Path Rewriting
+When static sites are built, assets like scripts and styles default to absolute references:
+```html
+<script src="/main.js">
+```
+When served on a platforms sub-path (`/sites/{id}/`), these references break. Deployed sites must run under sub-path directories without manual configuration.
 
-### Tradeoffs & What I Learned
-* **Tradeoff:** Git-backed deployment simplifies state persistence, but introduces cold-start latency due to Vercel's build propagation delays (averaging 45–60s). Next iteration: asset storage bucket + dynamic router middleware to cut propagation.
-* **Key Lesson:** Serverless request cycles are not suited for compute-heavy tasks; moving orchestration to asynchronous pipelines (GitHub Actions) keeps systems lightweight.
+The pipeline handles this by executing a recursive regex rewording pass on the built HTML and CSS assets inside the runner before pushing back:
+```bash
+find "public/sites/${SITE_ID}" -name "*.html" -exec \
+  sed -i "s|href=\"/|href=\"${BASE_PATH}/|g; s|src=\"/|src=\"${BASE_PATH}/|g" {} \;
+```
 
-### Receipts
+### Tradeoffs
+Using Git commits back to the main repository provides version history and simple persistence for free. However, Vercel must redeploy the DeployForge platform for every new commit, introducing a `30–60s` deployment propagation delay.
+
 * **Status:** `🟢 PRODUCTION`
-* **Build Time:** `~15s` production compilation (measured locally).
 * [View Source](https://github.com/Shivala-08/deploy-forge) · [Live Demo](https://deploy-forge-4klc.vercel.app)
+* [Architecture Docs](https://github.com/Shivala-08/deploy-forge/blob/main/docs/architecture.md) · [Security Model](https://github.com/Shivala-08/deploy-forge/blob/main/docs/security.md) · [Failure Modes](https://github.com/Shivala-08/deploy-forge/blob/main/docs/failure-modes.md) · [Benchmarks](https://github.com/Shivala-08/deploy-forge/blob/main/docs/benchmarks.md)
 
-<br/>
+<br>
+
+---
+
+## 🌐 The Skynet — Custom WebGL Portfolio OS
+
+An interactive browser-based operating system designed to display my technical work while keeping bundle payloads minimal.
+
+### From Library User → Systems Builder
+The site's main hero section featured a 3D point network representing a neural graph. Originally loaded via `three.js` and `React Three Fiber`, it introduced an `883 KB` JavaScript chunk and caused blocking rendering frames on mobile.
+
+I deleted the framework dependencies and wrote a dedicated GPU renderer (`mini-renderer.ts`, ~500 lines) that executes WebGL draw calls directly, dropping 3D bundle cost from **883 KB to 24.9 KB** (a **97% reduction**).
+
+### Rendering Flow
+```text
+Mouse Drag / Scroll Input
+          │
+          ▼
+ [Interaction Layer] ──(raycast hit-test)──► [Matrix Math (mini-math.ts)]
+                                                      │
+                                                      ▼
+                                            [WebGL MiniRenderer]
+                                            - Perspective camera
+                                            - Shaded mesh instancing
+                                            - Per-vertex point cloud
+                                                      │
+                                                      ▼
+                                                 Framebuffer
+```
+
+### Engineering Details & Transform Bug
+* **Shader Gradients:** Avoided multi-material overhead by baking the color-grade function directly into the point/line fragment shaders.
+* **Transform Bugs:** During development, camera raycast picking failed. Debugging revealed an incorrect column-major matrix transposition inversion in the math loop. I resolved it by correcting the row-column indices in `Mat4.invert`.
+
+* **Status:** `🟢 PRODUCTION`
+* [View Source](https://github.com/Shivala-08/The-skynet) · [Live Demo](https://pallav-os.vercel.app)
+* [Performance Docs](https://github.com/Shivala-08/The-skynet/blob/main/docs/performance.md) · [Rendering Docs](https://github.com/Shivala-08/The-skynet/blob/main/docs/RENDERING.md)
+
+<br>
 
 ---
 
 ## 🧠 Synapse — Knowledge Intelligence Engine
 
-A personal R&D project exploring **hybrid retrieval, knowledge-graph-augmented RAG, and adaptive model routing**. Synapse ingests heterogeneous industrial documents and answers questions with cited, confidence-scored responses by merging semantic vector search with a structured knowledge graph.
+A personal R&D project exploring **hybrid retrieval, knowledge-graph-augmented RAG, and adaptive complexity model routing**.
 
-### Architecture
+### System Architecture
 ```text
-            User Query
-                 │
-                 ▼
-         [Semantic Cache] ── Cache Hit ──► Immediate Response (196ms)
-                 │ Cache Miss
-                 ▼
-      [Complexity Classifier]
-                 │
-                 ├─────► Fast Path ────► Llama 3.1 8B (Low Latency)
-                 │
-                 └─► Deep Reasoning ───► Nemotron 3 Ultra 550B (High Budget)
-                         ▲
-                         │ Context Injection
-                 ┌───────┴───────┐
-                 │  Hybrid Search│ (Vector Store + NetworkX Graph)
-                 └───────────────┘
+           User Query
+                │
+                ▼
+        [Semantic Cache] ── Cache Hit ──► Immediate Response (196ms)
+                │ Cache Miss
+                ▼
+     [Complexity Classifier]
+                │
+                ├─────► Fast Path ────► Llama 3.1 8B (Low Latency)
+                │
+                └─► Deep Reasoning ───► Nemotron 3 Ultra 550B (High Budget)
+                        ▲
+                        │ Context Injection
+                ┌───────┴───────┐
+                │  Hybrid Search│ (Vector Store + NetworkX Graph)
+                └───────────────┘
 ```
 
-### Core Pipeline Status
-* **BUILT:**
-  * `✓` Ingestion parser (PDF, CSV, DOCX).
-  * `✓` Token-based chunker (1024 tokens).
-  * `✓` Vector store ingestion (ChromaDB + all-MiniLM-L6-v2).
-* **IN PROGRESS:**
-  * `◐` Complexity Classifier routing.
-  * `◐` Cross-encoder re-ranking.
-* **EXPERIMENTAL:**
-  * `◌` Structured NetworkX entity extraction.
-  * `◌` Semantic cache layer.
+### Retrieval Evaluation
+To measure retrieval quality without LLM bias, Synapse contains a deterministic ablation harness. Running across a 40-question ground-truth set showed that adding a cross-encoder re-ranker was the single largest accuracy contributor (+11 points) but introduced a **200ms** latency penalty.
 
-### Receipts
+### Failure Modes
+* **Multi-Hop Synthesis:** Chunks are retrieved based on independent semantic similarity. Questions requiring cross-document synthesis (e.g. comparing two different circulars) frequently fail semantic match criteria when evaluated with the LLM disabled.
+
 * **Status:** `🟡 ACTIVE DEVELOPMENT`
-* **Performance:** `207 ms` retrieval latency, `62.5%` accuracy on 40-question benchmark.
 * [View Source](https://github.com/Shivala-08/synapse)
+* [Evaluation Docs](https://github.com/Shivala-08/synapse/blob/main/docs/evaluation.md)
 
-<br/>
-
----
-
-## 🌌 The Skynet — Interactive OS
-
-An interactive browser-based operating system built to experiment with low-level WebGL graphics and asset optimization.
-
-### From Library User → Systems Builder
-Originally, the hero section loaded a `three.js` + `@react-three/fiber` chunk representing a `~883 KB` payload. Recognizing that recruiters and users demand instant loading, I deleted the heavy 3D framework and built a custom WebGL renderer from scratch.
-
-### Architecture
-```text
-            React UI (Framer Motion)
-                       │
-                       ▼
-               [Interaction Layer]
-                       │ (picking & scroll events)
-                       ▼
-                [WebGL Renderer] (mini-renderer.ts)
-                       │
-         ┌─────────────┼─────────────┐
-         ▼             ▼             ▼
-      [Camera]     [Shaders]     [GPU Buffer]
-```
-
-### Engineering Details
-* **Custom WebGL Renderer:** Wrote `mini-renderer.ts` (~500 lines) implementing camera perspective, raycast picking on point clouds, shaded meshes, and instance model matrices.
-* **Bundle Reduction:** Cut bundle weight from `883 KB` to `24.9 KB` (a **97% reduction**).
-* **Observed Metrics:** Achieved `98–99` Lighthouse performance score with all 3D features active.
-
-### Receipts
-* **Status:** `🟢 PRODUCTION`
-* **Bundle Weight:** `24.9 KB` custom WebGL chunk.
-* [View Source](https://github.com/Shivala-08/The-skynet) · [Live Demo](https://pallav-os.vercel.app)
-
-<br/>
+<br>
 
 ---
 
-## Technical Decisions
+## 🧠 Engineering Principles
 
-### Why GitHub Actions for builds?
-Build processes (like `npm install && npm run build`) are CPU-intensive and can easily hit serverless function execution timeouts (10–60s on Vercel). By dispatching events to GitHub Actions, we offload compilation to isolated runners and keep the host application lightweight.
+**01 — Constraints before architecture**
+Understand the actual limitation before choosing the solution.
 
-### Why write custom WebGL?
-Standard 3D frameworks (Three.js, R3F) load hundreds of kilobytes of unused classes and math utilities. Building `mini-renderer.ts` directly against the raw WebGL context allowed us to drop the 3D bundle size from `883 KB` to `24.9 KB` while maintaining 60+ FPS on mobile devices.
+**02 — Smallest useful system first**
+Build enough to prove the idea before expanding the abstraction.
 
-### Why Git-backed deployment?
-Using Git as a deployment primitive allows the platform to inherit version control, rollback capabilities, and secure state storage for free, without needing to maintain separate complex build storage buckets.
+**03 — Measure before optimizing**
+No performance claim without a measurement.
 
-<br/>
+**04 — Optimize the bottleneck**
+Don't rewrite the world because one component is slow.
 
----
+**05 — Ship → observe → iterate**
+A deployed system teaches more than an unfinished abstraction.
 
-## How I Think
-
-1. **Start with constraints:** Define what the system *cannot* do.
-2. **Build the smallest working version:** Avoid premature abstractions. Keep it simple first.
-3. **Measure everything:** Verify bundle sizes, latencies, Lighthouse scores, and frame rates.
-4. **Target the bottleneck:** Optimize only when you have metrics proving what is blocking the system.
-5. **Ship and iterate:** Running code is the best way to uncover hidden failure modes.
-
-<br/>
+<br>
 
 ---
 
-## Tech Stack
+## 🛠 Tech Stack
 
-<div align="center">
+### Languages
+Python · JavaScript · SQL · Bash
 
-| Group | Technologies |
-|---|---|
-| **AI / ML** | Python · RAG · ChromaDB · LLMs · spaCy |
-| **Frontend** | React · Next.js · TypeScript · WebGL · GSAP · Tailwind CSS |
-| **Backend** | FastAPI · Node.js · Express |
-| **Infra & DB** | Docker · GitHub Actions · PostgreSQL · Supabase · Vercel · Linux |
+### Frontend
+React · Next.js · Tailwind · HTML · CSS · Framer Motion · Lenis
 
-</div>
+### Backend
+FastAPI
 
-<br/>
+### Data
+PostgreSQL · Supabase
+
+### Infrastructure
+Docker · GitHub Actions · Vercel · Cloudflare · Linux · ngrok
+
+### Tools
+VS Code · Git · Claude Code · Antigravity IDE
+
+<br>
 
 ---
 
@@ -264,7 +251,7 @@ Using Git as a deployment primitive allows the platform to inherit version contr
   <img width="100%" src="https://streak-stats.demolab.com/?user=Shivala-08&hide_border=true&background=FFFFFF&stroke=0891B2&ring=7C3AED&fire=059669&currStreakLabel=0891B2&sideLabels=475569&currStreakNum=0F172A&sideNums=0F172A&dates=94A3B8&titleColor=0891B2&card_width=1180" alt="Streak" />
 </picture>
 
-<br/>
+<br>
 
 <!-- Stats — center width -->
 <picture>
@@ -272,18 +259,12 @@ Using Git as a deployment primitive allows the platform to inherit version contr
   <img width="60%" src="https://github-readme-stats-eight-theta.vercel.app/api?username=Shivala-08&show_icons=true&count_private=true&include_all_commits=true&hide_rank=true&hide_border=true&title_color=0891B2&icon_color=7C3AED&text_color=0F172A&bg_color=FFFFFF&card_width=500" alt="GitHub Stats" />
 </picture>
 
-<br/>
+<br>
 
 <!-- ===== 3D CONTRIBUTION GRAPH ===== -->
 ![3D contribution graph](./profile-3d-contrib/profile-night-rainbow.svg)
 
-<br/>
-
-<!-- ===== WAKATIME STATS ===== -->
-<!--START_SECTION:waka-->
-<!--END_SECTION:waka-->
-
-<br/>
+<br>
 
 <!-- ===== CONTRIBUTION SNAKE ===== -->
 <picture>
@@ -294,11 +275,11 @@ Using Git as a deployment primitive allows the platform to inherit version contr
 
 </div>
 
-<br/>
+<br>
 
 ---
 
-## Other Builds
+## 🧪 Other Builds
 
 <div align="center">
   <img width="100%" src="https://raw.githubusercontent.com/Shivala-08/Shivala-08/projects/projects.svg" alt="Featured Projects Grid" />
@@ -315,7 +296,7 @@ Using Git as a deployment primitive allows the platform to inherit version contr
 
 </div>
 
-<br/>
+<br>
 
 ### 🟢 Omnitrix OS
 * **Problem:** Build a highly interactive, responsive 3D dashboard representation of the Omnitrix interface.
@@ -323,13 +304,15 @@ Using Git as a deployment primitive allows the platform to inherit version contr
 * **Result:** Achieved steady `116fps` render speed on mobile and desktop devices.
 * [Repo](https://github.com/Shivala-08/ben-10-os) · [Demo](https://ben-10-os.vercel.app)
 
-### 🟢 CineVault
-* **Problem:** Video watchlist search tools have slow page load and search latencies.
-* **Build:** Vanilla JS application utilizing OMDb API with strict local caching.
-* **Result:** Initial page load under `100ms`, search-to-watchlist action completes in `2 clicks`.
+### 💰 Udhaar Ledger
+WhatsApp-based ledger concept for small businesses with AI-assisted payment nudging.
+* [Repo](https://github.com/Shivala-08/udhaar-ledger)
+
+### 🎬 CineVault
+Full-stack movie discovery application exploring API integration, discovery UX, and scalable frontend patterns.
 * [Repo](https://github.com/Shivala-08/cinevault) · [Demo](https://cinevault-eight-red.vercel.app)
 
-<br/>
+<br>
 
 ---
 
@@ -341,16 +324,22 @@ Things I'm currently trying to understand:
 * **GPU Context Underneath Frameworks:** Understanding how vertex/index buffers and shaders bind to OpenGL/WebGL contexts without rendering abstractions.
 * **Process Isolation:** How self-hosted build engines can safely isolate user-submitted scripts during compilation phases.
 
-<br/>
+<br>
 
 ---
 
-## Let's Build
+## 🤝 Let's Build Something
 
-Looking for opportunities where I can work on AI/ML, backend systems, developer infrastructure, or ambitious product engineering.
+I'm looking for opportunities to work on real engineering problems across software systems, AI/ML, developer infrastructure, and performance-focused applications.
+
+If you're building something interesting, I'd love to hear about it.
+
+**Pallav Dholariya**
 
 <div align="center">
 
 [**💼 LINKEDIN**](https://www.linkedin.com/in/pallavdholariya/) &nbsp;•&nbsp; [**✉️ EMAIL ME**](mailto:pallavdholariya@gmail.com)
 
 </div>
+
+> 🟢 Open to Software Engineering and AI/ML Internship opportunities.
