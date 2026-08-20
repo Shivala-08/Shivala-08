@@ -121,12 +121,33 @@ I built this after manually deploying static sites through repeated clone → bu
 
 <div align="center">
 
-| Project | Role | Status | Repo |
+| Project | Role | Status | Links |
 | --- | --- | --- | --- |
-| `Deploy Forge` | Solo | 🟢 Live | [Repo](https://github.com/Shivala-08/deploy-forge) |
-| `CineVault` | Solo | 🟢 Live | [Repo](https://github.com/Shivala-08/cinevault) |
-| `Omnitrix OS` | Solo | 🟢 Live | [Repo](https://github.com/Shivala-08/ben-10-os) |
-| `Doc Strange` | Solo | 🟢 Live | [Repo](https://github.com/Shivala-08/doc--strange) |
+| `Deploy Forge` | Solo | 🟢 Live | [Repo](https://github.com/Shivala-08/deploy-forge) · [🔗 Live Demo](https://deploy-forge-4klc.vercel.app) |
+| `CineVault` | Solo | 🟢 Live | [Repo](https://github.com/Shivala-08/cinevault) · [🔗 Live Demo](https://cinevault-eight-red.vercel.app) |
+| `Omnitrix OS` | Solo | 🟢 Live | [Repo](https://github.com/Shivala-08/ben-10-os) · [🔗 Live Demo](https://ben-10-os.vercel.app) |
+| `Doc Strange` | Solo | 🟢 Live | [Repo](https://github.com/Shivala-08/doc--strange) · [🔗 Live Demo](https://doctor-strange-filter.vercel.app) |
+
+</div>
+
+<!-- ===== PROJECT ENGINEERING BADGES ===== -->
+<div align="center">
+
+**Deploy Forge**
+![CI](https://img.shields.io/github/actions/workflow/status/Shivala-08/deploy-forge/ci.yml?style=flat-square&label=CI)
+![License](https://img.shields.io/github/license/Shivala-08/deploy-forge?style=flat-square)
+
+**CineVault**
+![CI](https://img.shields.io/github/actions/workflow/status/Shivala-08/cinevault/ci.yml?style=flat-square&label=CI)
+![License](https://img.shields.io/github/license/Shivala-08/cinevault?style=flat-square)
+
+**Omnitrix OS**
+![CI](https://img.shields.io/github/actions/workflow/status/Shivala-08/ben-10-os/ci.yml?style=flat-square&label=CI)
+![License](https://img.shields.io/github/license/Shivala-08/ben-10-os?style=flat-square)
+
+**Doc Strange**
+![CI](https://img.shields.io/github/actions/workflow/status/Shivala-08/doc--strange/ci.yml?style=flat-square&label=CI)
+![License](https://img.shields.io/github/license/Shivala-08/doc--strange?style=flat-square)
 
 </div>
 

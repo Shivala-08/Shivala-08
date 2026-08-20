@@ -54,7 +54,7 @@ set_theme("dark")
 # ---------------- layout ----------------
 W        = 1180
 CARD_W   = 578
-CARD_H   = 204
+CARD_H   = 168
 GAP      = 14
 MARGIN   = 5
 FONT     = "ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace"
@@ -119,6 +119,9 @@ def status_badge(p, x, y, begin):
     a(f'</circle>')
     a(f'<text x="{x + 18}" y="{y + 13}" font-size="9.5" font-weight="700" fill="{fill}">{label}</text>')
     a(f'<text x="{x}" y="{y + 36}" font-size="10" fill="{MUTED}">{role}</text>')
+    demo = p.get("homepage")
+    if demo:
+        a(f'<text x="{x}" y="{y + 52}" font-size="9.5" fill="{CYAN}">demo ↗</text>')
     a('</g>')
     return "".join(e)
 
@@ -131,7 +134,7 @@ def card(p, x, y, idx):
     repo = repo.replace("https://github.com/", "").replace("http://github.com/", "")
     repo = repo.rstrip("/")
     href = f"https://github.com/{esc(repo)}"
-    
+    a(f'<a href="{href}" target="_blank">')
     a(f'<g opacity="0" transform="translate({x},{y})">')
     a(f'<animate attributeName="opacity" from="0" to="1" dur="0.5s" begin="{b:.2f}s" fill="freeze"/>')
 
@@ -142,11 +145,7 @@ def card(p, x, y, idx):
     a(f'<rect width="{CARD_W}" height="30" rx="12" fill="{PANEL_BAR}"/>')
     a(f'<rect y="18" width="{CARD_W}" height="12" fill="{PANEL_BAR}"/>')
     a(f'<line x1="0" y1="30" x2="{CARD_W}" y2="30" stroke="{BARLINE}"/>')
-    
-    # repo link header
-    a(f'<a href="{href}" target="_blank">')
     a(f'<text x="16" y="19" font-size="10" fill="{MUTED}"><tspan fill="{CYAN}">&#8226;</tspan> {esc(repo)}</text>')
-    a('</a>')
 
     # activity dot: emerald pulse if pushed within 14 days, dim otherwise
     days = 999
@@ -167,67 +166,41 @@ def card(p, x, y, idx):
                   f'values="0 0; 0 -2.5; 0 0" dur="5s" begin="{b+idx*0.5:.2f}s" '
                   f'repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" '
                   f'keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>')
-    a(f'<a href="{href}" target="_blank">')
     if logo:
         a(f'<g>{float_anim}<image x="16" y="44" width="40" height="40" href="{logo}" preserveAspectRatio="xMidYMid meet"/></g>')
     else:
         initial = esc((p.get("name") or "?")[0].upper())
         a(f'<g>{float_anim}<rect x="16" y="44" width="40" height="40" rx="9" fill="{VIOLET2}" opacity="0.9"/>'
           f'<text x="36" y="71" text-anchor="middle" font-size="20" font-weight="700" fill="{MONO_TX}">{initial}</text></g>')
-    a('</a>')
 
     # name + blinking cursor
     name = esc(p.get("name", "unnamed"))
-    a(f'<a href="{href}" target="_blank">')
-    a(f'<text x="68" y="58" font-size="17" font-weight="700" fill="{TEXT}">{name}'
+    a(f'<text x="68" y="61" font-size="17" font-weight="700" fill="{TEXT}">{name}'
       f'<tspan fill="{CYAN}">_<animate attributeName="opacity" values="1;0;1" dur="1.2s" '
       f'begin="{b+0.4:.2f}s" repeatCount="indefinite"/></tspan></text>')
-    a('</a>')
 
     # description, wrapped to 2 lines
     for i, line in enumerate(wrap_text(p.get("description", ""), 52)):
-        a(f'<text x="68" y="{76 + i * 15}" font-size="11" fill="{MUTED}">{esc(line)}</text>')
+        a(f'<text x="68" y="{80 + i * 16}" font-size="11" fill="{MUTED}">{esc(line)}</text>')
 
     # tag pills
     tx = 68
     for tag in (p.get("tags") or [])[:3]:
         tw = len(tag) * 6.6 + 14
-        a(f'<rect x="{tx}" y="110" width="{tw:.0f}" height="17" rx="8.5" fill="{PILL_BG}" stroke="{PILL_STROKE}"/>')
-        a(f'<text x="{tx + tw/2:.0f}" y="122" text-anchor="middle" font-size="9.5" fill="{VIOLET}">{esc(tag)}</text>')
+        a(f'<rect x="{tx}" y="118" width="{tw:.0f}" height="17" rx="8.5" fill="{PILL_BG}" stroke="{PILL_STROKE}"/>')
+        a(f'<text x="{tx + tw/2:.0f}" y="130" text-anchor="middle" font-size="9.5" fill="{VIOLET}">{esc(tag)}</text>')
         tx += tw + 7
-
-    # CI + license badges
-    ci_badge_url = f"https://img.shields.io/github/actions/workflow/status/{repo}/ci.yml?style=flat-square&amp;label=CI"
-    lic_badge_url = f"https://img.shields.io/github/license/{repo}?style=flat-square"
-    a(f'<image x="68" y="134" width="75" height="20" href="{ci_badge_url}"/>')
-    a(f'<image x="150" y="134" width="78" height="20" href="{lic_badge_url}"/>')
-
-    # Repo + Live Demo buttons
-    a(f'<a href="{href}" target="_blank">')
-    a(f'<g class="btn-repo">')
-    a(f'<rect x="68" y="160" width="60" height="22" rx="6" fill="none" stroke="{DIM}" stroke-width="1"/>')
-    a(f'<text x="98" y="175" font-size="10.5" font-weight="700" fill="{TEXT}" text-anchor="middle">Repo</text>')
-    a(f'</g>')
-    a(f'</a>')
-
-    demo = p.get("homepage")
-    if demo:
-        a(f'<a href="{esc(demo)}" target="_blank">')
-        a(f'<g class="btn-demo">')
-        a(f'<rect x="135" y="160" width="90" height="22" rx="6" fill="{VIOLET2}"/>')
-        a(f'<text x="180" y="175" font-size="10.5" font-weight="700" fill="{MONO_TX}" text-anchor="middle">Live Demo →</text>')
-        a(f'</g>')
-        a(f'</a>')
 
     # bottom row: stars + updated
     stars = p.get("stars", 0)
-    a(f'<text x="68" y="196" font-size="11" fill="{MUTED}">'
+    a(f'<text x="68" y="155" font-size="11" fill="{MUTED}">'
       f'<tspan fill="{CYAN}">&#9733;</tspan> {stars}'
       f'<tspan fill="{DIM}" dx="14">updated {rel_time(p.get("pushed_at"))}</tspan></text>')
 
-    # status + role badge
-    a(status_badge(p, CARD_W - 92, 80, b + 0.3))
+    # status + role badge (replaces language-percentage donut)
+    a(status_badge(p, CARD_W - 92, CARD_H // 2 - 18, b + 0.3))
     a('</g>')
+    a('</a>')
     return "".join(e)
 
 def build(projects, theme="dark"):
@@ -238,12 +211,6 @@ def build(projects, theme="dark"):
     a = s.append
     a(f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}" '
       f'font-family="{FONT}" role="img" aria-label="Projects">')
-    a('<style>')
-    a(f'  .btn-demo {{ fill: {VIOLET2}; cursor: pointer; transition: opacity 0.2s; }}')
-    a('  .btn-demo:hover { opacity: 0.85; }')
-    a(f'  .btn-repo {{ fill: none; stroke: {DIM}; cursor: pointer; transition: stroke 0.2s, fill 0.2s; }}')
-    a(f'  .btn-repo:hover {{ stroke: {CYAN}; fill: rgba(34,211,238,0.08); }}')
-    a('</style>')
     a(f'<rect width="{W}" height="{H}" fill="{BG}"/>')
     # animated accent gradient (same as banner)
     a(f'<defs><linearGradient id="{gid}" x1="0" y1="0" x2="1" y2="0">'
