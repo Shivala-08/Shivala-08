@@ -9,11 +9,20 @@
     "status": "live"
   },
   {
-    "name": "CineVault",
-    "repo": "Shivala-08/cinevault",
-    "description": "Movie discovery: search to watchlist in 2 clicks. Vanilla JS — no framework.",
-    "tags": ["VanillaJS", "CSS", "OMDb API"],
-    "homepage": "https://cinevault-eight-red.vercel.app",
+    "name": "Synapse AI Engine",
+    "repo": "Shivala-08/synapse",
+    "description": "Adaptive complexity classifier (Llama 8B/Nemotron 550B) with hybrid vector & network graph retrieval.",
+    "tags": ["Python", "ChromaDB", "LLMs"],
+    "homepage": "https://github.com/Shivala-08/synapse",
+    "role": "Solo",
+    "status": "wip"
+  },
+  {
+    "name": "The Skynet",
+    "repo": "Shivala-08/The-skynet",
+    "description": "Interactive OS with a custom WebGL renderer. Dropped 3D chunk weight from 883KB to 24.9KB.",
+    "tags": ["WebGL", "Next.js", "TypeScript"],
+    "homepage": "https://pallav-os.vercel.app",
     "role": "Solo",
     "status": "live"
   },
@@ -23,15 +32,6 @@
     "description": "3D Omnitrix UI with Three.js + GSAP. 10 aliens, 116fps on deployed build.",
     "tags": ["NextJS", "Three.js", "GSAP"],
     "homepage": "https://ben-10-os.vercel.app",
-    "role": "Solo",
-    "status": "live"
-  },
-  {
-    "name": "Doc Strange",
-    "repo": "Shivala-08/doc--strange",
-    "description": "Hand-tracking AR filter at 89fps in-browser. MediaPipe + Canvas, zero backend.",
-    "tags": ["VanillaJS", "MediaPipe", "Canvas"],
-    "homepage": "https://doctor-strange-filter.vercel.app",
     "role": "Solo",
     "status": "live"
   }
