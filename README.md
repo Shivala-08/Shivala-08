@@ -16,7 +16,7 @@
 <!-- ===== LIVE ACTIVITY ===== -->
 <div align="center">
 
-Last activity: <!--LATEST_COMMIT-->fetching...<!--END_LATEST_COMMIT-->
+Last activity: <!--LATEST_COMMIT-->No recent activity<!--END_LATEST_COMMIT-->
 
 </div>
 
