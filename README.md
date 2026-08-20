@@ -26,7 +26,7 @@ Last activity: <!--LATEST_COMMIT-->No recent activity<!--END_LATEST_COMMIT-->
 
 🟢 **OPEN TO SOFTWARE / AI/ML INTERNSHIPS**
 
-[**📄 VIEW RESUME**](https://github.com/Shivala-08/Shivala-08/raw/main/resume.pdf) &nbsp;•&nbsp; [**📁 VIEW PROJECTS**](#-featured-deploy-forge) &nbsp;•&nbsp; [**✉️ CONTACT ME**](#-lets-build)
+[**📁 VIEW PROJECTS**](#-featured-deploy-forge) &nbsp;•&nbsp; [**✉️ CONTACT ME**](#-lets-build)
 
 </div>
 
@@ -131,10 +131,6 @@ A Git-backed deployment platform that takes a GitHub repository URL and compiles
 * **Status:** `🟢 PRODUCTION`
 * **Build Time:** `~15s` production compilation (measured locally).
 * [View Source](https://github.com/Shivala-08/deploy-forge) · [Live Demo](https://deploy-forge-4klc.vercel.app)
-
-<div align="center">
-  <img width="90%" src="https://raw.githubusercontent.com/Shivala-08/deploy-forge/main/assets/demo.gif" alt="Deploy Forge Interactive Demo" />
-</div>
 
 <br/>
 
@@ -372,6 +368,6 @@ Looking for opportunities where I can work on AI/ML, backend systems, developer 
 
 <div align="center">
 
-[**📄 VIEW RESUME**](https://github.com/Shivala-08/Shivala-08/raw/main/resume.pdf) &nbsp;•&nbsp; [**💼 LINKEDIN**](https://www.linkedin.com/in/pallavdholariya/) &nbsp;•&nbsp; [**✉️ EMAIL ME**](mailto:pallavdholariya@gmail.com)
+[**💼 LINKEDIN**](https://www.linkedin.com/in/pallavdholariya/) &nbsp;•&nbsp; [**✉️ EMAIL ME**](mailto:pallavdholariya@gmail.com)
 
 </div>
