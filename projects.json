@@ -1,28 +1,38 @@
 [
   {
-    "name": "Omnitrix OS",
-    "repo": "Shivala-08/ben-10-os",
-    "description": "An immersive, interactive Ben 10 Omnitrix OS interface built with Next.js and Three.js.",
-    "tags": ["NextJS", "React", "GSAP"]
+    "name": "Deploy Forge",
+    "repo": "Shivala-08/deploy-forge",
+    "description": "CI/CD script: 6 manual deploy steps → 1 command (~80% faster). Bash + Python + Docker.",
+    "tags": ["Docker", "Bash", "Python"],
+    "homepage": "https://deploy-forge-4klc.vercel.app",
+    "role": "Solo",
+    "status": "live"
   },
   {
     "name": "CineVault",
     "repo": "Shivala-08/cinevault",
-    "description": "A cinematic movie discovery & watchlist app built with Vanilla JS and OMDb API.",
-    "tags": ["VanillaJS", "CSS", "OMDb API"]
+    "description": "Movie discovery: search to watchlist in 2 clicks. Vanilla JS — no framework.",
+    "tags": ["VanillaJS", "CSS", "OMDb API"],
+    "homepage": "https://cinevault-eight-red.vercel.app",
+    "role": "Solo",
+    "status": "live"
   },
   {
-    "name": "Deploy Forge",
-    "repo": "Shivala-08/deploy-forge",
-    "description": "A lightweight CI/CD utility to automate Docker deployments on Linux.",
-    "tags": ["Docker", "Bash", "Python"],
-    "homepage": "https://deploy-forge-4klc.vercel.app"
+    "name": "Omnitrix OS",
+    "repo": "Shivala-08/ben-10-os",
+    "description": "3D Omnitrix UI with Three.js + GSAP. 12 interactive sequences, smooth on mobile.",
+    "tags": ["NextJS", "Three.js", "GSAP"],
+    "homepage": "https://ben-10-os.vercel.app",
+    "role": "Solo",
+    "status": "live"
   },
   {
     "name": "Doc Strange",
     "repo": "Shivala-08/doc--strange",
-    "description": "A real-time Doctor Strange magic portal filter powered by MediaPipe hand tracking.",
+    "description": "Real-time hand-tracking AR at 30fps in-browser. MediaPipe + Canvas, zero backend.",
     "tags": ["VanillaJS", "MediaPipe", "Canvas"],
-    "homepage": "https://doctor-strange-filter.vercel.app"
+    "homepage": "https://doctor-strange-filter.vercel.app",
+    "role": "Solo",
+    "status": "live"
   }
 ]

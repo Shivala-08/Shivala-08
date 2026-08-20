@@ -95,6 +95,24 @@ Last activity: <!--LATEST_COMMIT-->No recent activity<!--END_LATEST_COMMIT-->
 <br/>
 <br/>
 
+<!-- ===== FLAGSHIP PROJECT ===== -->
+## 🚀 Featured: Deploy Forge
+
+<div align="center">
+
+[![Deploy Forge — open live demo](https://img.shields.io/badge/Try_live_demo-deploy--forge--4klc.vercel.app-0891B2?style=for-the-badge&logo=vercel&logoColor=white)](https://deploy-forge-4klc.vercel.app)
+
+![Last Commit](https://img.shields.io/github/last-commit/Shivala-08/deploy-forge?style=flat-square)
+![License](https://img.shields.io/github/license/Shivala-08/deploy-forge?style=flat-square)
+
+</div>
+
+I built this after manually deploying the same Docker app 20+ times and realizing every deploy took 6 steps and ~4 minutes. Deploy Forge wraps build → push → restart into one command, cutting that to under 45 seconds. Written in Bash + Python because I wanted zero runtime dependencies — next step is adding rollback support.
+
+[Read the full writeup →](https://github.com/Shivala-08/deploy-forge#readme)
+
+<br/>
+
 <!-- ===== FEATURED PROJECTS ===== -->
 <div align="center">
   <img width="100%" src="https://raw.githubusercontent.com/Shivala-08/Shivala-08/projects/projects.svg" alt="Projects" />
@@ -102,13 +120,13 @@ Last activity: <!--LATEST_COMMIT-->No recent activity<!--END_LATEST_COMMIT-->
 
 <div align="center">
 
-| Project | Demo | Links |
-| --- | --- | --- |
-| `Omnitrix OS` | ![Omnitrix OS demo](https://raw.githubusercontent.com/Shivala-08/ben-10-os/main/assets/demo.gif) | [Repo](https://github.com/Shivala-08/ben-10-os) • [🔗 Live Demo](https://ben-10-os.vercel.app) |
-| `CineVault` | ![CineVault demo](https://raw.githubusercontent.com/Shivala-08/cinevault/main/assets/demo.gif) | [Repo](https://github.com/Shivala-08/cinevault) • [🔗 Live Demo](https://cinevault-eight-red.vercel.app) |
-| `Deploy Forge` | ![Deploy Forge demo](https://raw.githubusercontent.com/Shivala-08/deploy-forge/main/assets/demo.gif) | [Repo](https://github.com/Shivala-08/deploy-forge) • [🔗 Live Demo](https://deploy-forge-4klc.vercel.app) |
-| `Doc Strange` | ![Doc Strange demo](https://raw.githubusercontent.com/Shivala-08/doc--strange/main/assets/demo.gif) | [Repo](https://github.com/Shivala-08/doc--strange) • [🔗 Live Demo](https://doctor-strange-filter.vercel.app) |
-| `Portfolio / The Skynet` | ![Portfolio demo](https://raw.githubusercontent.com/Shivala-08/The-skynet/main/assets/demo.gif) | [Repo](https://github.com/Shivala-08/The-skynet) • [🔗 Live Demo](https://pallav-os.vercel.app) |
+| Project | Role | Status | Links |
+| --- | --- | --- | --- |
+| `Deploy Forge` | Solo | 🟢 Live | [Repo](https://github.com/Shivala-08/deploy-forge) · [Demo](https://deploy-forge-4klc.vercel.app) |
+| `CineVault` | Solo | 🟢 Live | [Repo](https://github.com/Shivala-08/cinevault) · [Demo](https://cinevault-eight-red.vercel.app) |
+| `Omnitrix OS` | Solo | 🟢 Live | [Repo](https://github.com/Shivala-08/ben-10-os) · [Demo](https://ben-10-os.vercel.app) |
+| `Doc Strange` | Solo | 🟢 Live | [Repo](https://github.com/Shivala-08/doc--strange) · [Demo](https://doctor-strange-filter.vercel.app) |
+| `Portfolio / The Skynet` | Solo | 🟢 Live | [Repo](https://github.com/Shivala-08/The-skynet) · [Demo](https://pallav-os.vercel.app) |
 
 </div>
 

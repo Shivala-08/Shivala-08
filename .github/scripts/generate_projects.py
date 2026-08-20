@@ -100,33 +100,30 @@ def wrap_text(s, max_chars, max_lines=2):
         lines[-1] = lines[-1][:max_chars-1].rstrip() + "…"
     return lines
 
-def donut_segments(languages, cx, cy, r, begin):
-    """Animated donut: each segment draws itself in sequence (SMIL)."""
-    total = sum(languages.values()) or 1
-    entries = sorted(languages.items(), key=lambda kv: -kv[1])[:4]
-    other = total - sum(v for _, v in entries)
-    if other > 0: entries.append(("Other", other))
-    C = 2 * math.pi * r
-    out, legend = [], []
-    offset = 0.0
-    t = begin
-    for i, (lang, v) in enumerate(entries):
-        frac = v / total
-        seg = frac * C
-        col = DONUT_COLORS[i % len(DONUT_COLORS)]
-        # draw-in: dasharray fixed, dashoffset animates from seg to 0 within its slot
-        out.append(
-            f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="none" stroke="{col}" stroke-width="9" '
-            f'stroke-dasharray="{seg:.2f} {C - seg:.2f}" stroke-dashoffset="{-offset:.2f}" '
-            f'transform="rotate(-90 {cx} {cy})" opacity="0">'
-            f'<animate attributeName="opacity" from="0" to="1" dur="0.01s" begin="{t:.2f}s" fill="freeze"/>'
-            f'<animate attributeName="stroke-dasharray" from="0 {C:.2f}" to="{seg:.2f} {C - seg:.2f}" '
-            f'dur="0.6s" begin="{t:.2f}s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.3 0 0.2 1"/>'
-            f'</circle>')
-        legend.append((lang, frac, col))
-        offset += seg
-        t += 0.18
-    return "".join(out), legend
+def status_badge(p, x, y, begin):
+    """Engineering-style status block instead of language-percentage donut."""
+    status = (p.get("status") or "wip").lower()
+    role = esc(p.get("role") or "Solo")
+    live = status == "live"
+    label = "LIVE" if live else "WIP"
+    fill = EMERALD if live else "#EAB308"
+    stroke = "rgba(16,185,129,0.45)" if live else "rgba(234,179,8,0.45)"
+    e = []
+    a = e.append
+    a(f'<g opacity="0">')
+    a(f'<animate attributeName="opacity" from="0" to="1" dur="0.4s" begin="{begin:.2f}s" fill="freeze"/>')
+    a(f'<rect x="{x}" y="{y}" width="54" height="18" rx="9" fill="{fill}" opacity="0.18" stroke="{stroke}"/>')
+    a(f'<circle cx="{x + 10}" cy="{y + 9}" r="3.5" fill="{fill}">')
+    if live:
+        a(f'<animate attributeName="opacity" values="1;0.35;1" dur="1.8s" repeatCount="indefinite"/>')
+    a(f'</circle>')
+    a(f'<text x="{x + 18}" y="{y + 13}" font-size="9.5" font-weight="700" fill="{fill}">{label}</text>')
+    a(f'<text x="{x}" y="{y + 36}" font-size="10" fill="{MUTED}">{role}</text>')
+    demo = p.get("homepage")
+    if demo:
+        a(f'<text x="{x}" y="{y + 52}" font-size="9.5" fill="{CYAN}">demo ↗</text>')
+    a('</g>')
+    return "".join(e)
 
 def card(p, x, y, idx):
     b = 0.25 + idx * 0.15          # staggered entrance
@@ -200,23 +197,8 @@ def card(p, x, y, idx):
       f'<tspan fill="{CYAN}">&#9733;</tspan> {stars}'
       f'<tspan fill="{DIM}" dx="14">updated {rel_time(p.get("pushed_at"))}</tspan></text>')
 
-    # language donut, animated draw-in — vertically centered in the card body
-    langs = p.get("languages") or {}
-    if langs:
-        cx, cy, r = CARD_W - 58, CARD_H // 2 + 6, 27
-        segs, legend = donut_segments(langs, cx, cy, r, b + 0.3)
-        a(f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="none" stroke="{RING_BG}" stroke-width="9"/>')
-        a(segs)
-        top = legend[0]
-        a(f'<text x="{cx}" y="{cy+4}" text-anchor="middle" font-size="11" font-weight="700" fill="{TEXT}">{top[1]*100:.0f}%</text>')
-        # legend: fixed left column, dot then left-aligned text; ends well before the ring
-        dot_x = cx - r - 92
-        text_x = dot_x + 9
-        ly = cy - 22
-        for lang, frac, col in legend[:3]:
-            a(f'<circle cx="{dot_x}" cy="{ly}" r="3.5" fill="{col}"/>')
-            a(f'<text x="{text_x}" y="{ly+4}" font-size="10" fill="{MUTED}">{esc(lang)} {frac*100:.0f}%</text>')
-            ly += 18
+    # status + role badge (replaces language-percentage donut)
+    a(status_badge(p, CARD_W - 92, CARD_H // 2 - 18, b + 0.3))
     a('</g>')
     a('</a>')
     return "".join(e)
