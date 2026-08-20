@@ -49,6 +49,18 @@
   <img width="100%" src="https://raw.githubusercontent.com/Shivala-08/Shivala-08/projects/projects.svg" alt="Projects" />
 </div>
 
+<div align="center">
+
+| Project | Links |
+| --- | --- |
+| `Omnitrix OS` | [Repo](https://github.com/Shivala-08/ben-10-os) • [🔗 Live Demo](https://ben-10-os.vercel.app) |
+| `CineVault` | [Repo](https://github.com/Shivala-08/cinevault) • [🔗 Live Demo](https://cinevault-eight-red.vercel.app) |
+| `Deploy Forge` | [Repo](https://github.com/Shivala-08/deploy-forge) • [🔗 Live Demo](https://deploy-forge-4klc.vercel.app) |
+| `Doc Strange` | [Repo](https://github.com/Shivala-08/doc--strange) • [🔗 Live Demo](https://doctor-strange-filter.vercel.app) |
+| `Portfolio / The Skynet` | [Repo](https://github.com/Shivala-08/The-skynet) • [🔗 Live Demo](https://pallav-os.vercel.app) |
+
+</div>
+
 <!-- ===== SOCIAL BADGES ===== -->
 <br/>
 <div align="center">

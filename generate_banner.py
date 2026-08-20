@@ -80,7 +80,7 @@ PERSONAL_INFO = {
     "database": "PostgreSQL, Supabase",
     "infra": "Docker, GitHub Actions, Vercel, Linux",
     "email": "pallavdholariya@gmail.com",
-    "portfolio": "coming soon",
+    "portfolio": "pallav-os.vercel.app",
     "linkedin": "pallavdholariya",
     "github": "Shivala-08",
 }

@@ -15,12 +15,14 @@
     "name": "Deploy Forge",
     "repo": "Shivala-08/deploy-forge",
     "description": "A lightweight CI/CD utility to automate Docker deployments on Linux.",
-    "tags": ["Docker", "Bash", "Python"]
+    "tags": ["Docker", "Bash", "Python"],
+    "homepage": "https://deploy-forge-4klc.vercel.app"
   },
   {
-    "name": "Udhaar Ledger",
-    "repo": "Shivala-08/udhaar-ledger",
-    "description": "A double-entry ledger bookkeeping app for local business transaction tracking.",
-    "tags": ["React", "FastAPI", "Supabase"]
+    "name": "Doc Strange",
+    "repo": "Shivala-08/doc--strange",
+    "description": "A real-time Doctor Strange magic portal filter powered by MediaPipe hand tracking.",
+    "tags": ["VanillaJS", "MediaPipe", "Canvas"],
+    "homepage": "https://doctor-strange-filter.vercel.app"
   }
 ]
