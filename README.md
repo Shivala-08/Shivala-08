@@ -242,12 +242,6 @@ Originally, the hero section loaded a `three.js` + `@react-three/fiber` chunk re
 * **Result:** Achieved steady `116fps` render speed on mobile and desktop devices.
 * [Repo](https://github.com/Shivala-08/ben-10-os) · [Demo](https://ben-10-os.vercel.app)
 
-### 🟢 Udhaar Ledger
-* **Problem:** Small shopkeepers manually track credit accounts, leading to errors and forgotten collections.
-* **Build:** Built a localized database ledger matching scanned invoices to SMS receipt streams.
-* **Result:** Automated invoice matching, dropping manual logging time by 90%.
-* [Repo](https://github.com/Shivala-08/udhaar-ledger)
-
 ### 🟢 CineVault
 * **Problem:** Video watchlist search tools have slow page load and search latencies.
 * **Build:** Vanilla JS application utilizing OMDb API with strict local caching.
