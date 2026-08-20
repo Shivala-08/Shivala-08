@@ -13,13 +13,6 @@
 
 </div>
 
-<!-- ===== LIVE ACTIVITY ===== -->
-<div align="center">
-
-Last activity: <!--LATEST_COMMIT-->No recent activity<!--END_LATEST_COMMIT-->
-
-</div>
-
 <br/>
 
 <div align="center">
@@ -217,41 +210,6 @@ Originally, the hero section loaded a `three.js` + `@react-three/fiber` chunk re
 
 ---
 
-## Other Builds
-
-<div align="center">
-  <img width="100%" src="https://raw.githubusercontent.com/Shivala-08/Shivala-08/projects/projects.svg" alt="Featured Projects Grid" />
-</div>
-
-<div align="center">
-
-| Project | Role | Status | Links |
-| --- | --- | --- | --- |
-| `Deploy Forge` | Solo | 🟢 Live | [Repo](https://github.com/Shivala-08/deploy-forge) · [🔗 Live Demo](https://deploy-forge-4klc.vercel.app) |
-| `Synapse AI Engine` | Solo | 🟡 In Dev | [Repo](https://github.com/Shivala-08/synapse) |
-| `The Skynet` | Solo | 🟢 Live | [Repo](https://github.com/Shivala-08/The-skynet) · [🔗 Live Demo](https://pallav-os.vercel.app) |
-| `Omnitrix OS` | Solo | 🟢 Live | [Repo](https://github.com/Shivala-08/ben-10-os) · [🔗 Live Demo](https://ben-10-os.vercel.app) |
-
-</div>
-
-<br/>
-
-### 🟢 Omnitrix OS
-* **Problem:** Build a highly interactive, responsive 3D dashboard representation of the Omnitrix interface.
-* **Build:** Utilized Next.js, Three.js, and GSAP timeline choreography with custom Web Audio synthesis.
-* **Result:** Achieved steady `116fps` render speed on mobile and desktop devices.
-* [Repo](https://github.com/Shivala-08/ben-10-os) · [Demo](https://ben-10-os.vercel.app)
-
-### 🟢 CineVault
-* **Problem:** Video watchlist search tools have slow page load and search latencies.
-* **Build:** Vanilla JS application utilizing OMDb API with strict local caching.
-* **Result:** Initial page load under `100ms`, search-to-watchlist action completes in `2 clicks`.
-* [Repo](https://github.com/Shivala-08/cinevault) · [Demo](https://cinevault-eight-red.vercel.app)
-
-<br/>
-
----
-
 ## Technical Decisions
 
 ### Why GitHub Actions for builds?
@@ -296,7 +254,7 @@ Using Git as a deployment primitive allows the platform to inherit version contr
 
 ---
 
-## Activity
+## 📈 GitHub Activity
 
 <div align="center">
 
@@ -308,14 +266,10 @@ Using Git as a deployment primitive allows the platform to inherit version contr
 
 <br/>
 
-<!-- Stats + Top languages — side by side -->
+<!-- Stats — center width -->
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://github-readme-stats-eight-theta.vercel.app/api?username=Shivala-08&show_icons=true&count_private=true&include_all_commits=true&hide_rank=true&hide_border=true&title_color=22D3EE&icon_color=A78BFA&text_color=94A3B8&bg_color=0A101F&card_width=500" />
-  <img width="49%" src="https://github-readme-stats-eight-theta.vercel.app/api?username=Shivala-08&show_icons=true&count_private=true&include_all_commits=true&hide_rank=true&hide_border=true&title_color=0891B2&icon_color=7C3AED&text_color=0F172A&bg_color=FFFFFF&card_width=500" alt="GitHub Stats" />
-</picture>
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://github-readme-stats-eight-theta.vercel.app/api/top-langs/?username=Shivala-08&layout=compact&langs_count=8&hide_border=true&title_color=22D3EE&text_color=94A3B8&bg_color=0A101F&card_width=500" />
-  <img width="49%" src="https://github-readme-stats-eight-theta.vercel.app/api/top-langs/?username=Shivala-08&layout=compact&langs_count=8&hide_border=true&title_color=0891B2&text_color=0F172A&bg_color=FFFFFF&card_width=500" alt="Top Languages" />
+  <img width="60%" src="https://github-readme-stats-eight-theta.vercel.app/api?username=Shivala-08&show_icons=true&count_private=true&include_all_commits=true&hide_rank=true&hide_border=true&title_color=0891B2&icon_color=7C3AED&text_color=0F172A&bg_color=FFFFFF&card_width=500" alt="GitHub Stats" />
 </picture>
 
 <br/>
@@ -339,6 +293,41 @@ Using Git as a deployment primitive allows the platform to inherit version contr
 </picture>
 
 </div>
+
+<br/>
+
+---
+
+## Other Builds
+
+<div align="center">
+  <img width="100%" src="https://raw.githubusercontent.com/Shivala-08/Shivala-08/projects/projects.svg" alt="Featured Projects Grid" />
+</div>
+
+<div align="center">
+
+| Project | Role | Status | Links |
+| --- | --- | --- | --- |
+| `Deploy Forge` | Solo | 🟢 Live | [Repo](https://github.com/Shivala-08/deploy-forge) · [🔗 Live Demo](https://deploy-forge-4klc.vercel.app) |
+| `Synapse AI Engine` | Solo | 🟡 In Dev | [Repo](https://github.com/Shivala-08/synapse) |
+| `The Skynet` | Solo | 🟢 Live | [Repo](https://github.com/Shivala-08/The-skynet) · [🔗 Live Demo](https://pallav-os.vercel.app) |
+| `Omnitrix OS` | Solo | 🟢 Live | [Repo](https://github.com/Shivala-08/ben-10-os) · [🔗 Live Demo](https://ben-10-os.vercel.app) |
+
+</div>
+
+<br/>
+
+### 🟢 Omnitrix OS
+* **Problem:** Build a highly interactive, responsive 3D dashboard representation of the Omnitrix interface.
+* **Build:** Utilized Next.js, Three.js, and GSAP timeline choreography with custom Web Audio synthesis.
+* **Result:** Achieved steady `116fps` render speed on mobile and desktop devices.
+* [Repo](https://github.com/Shivala-08/ben-10-os) · [Demo](https://ben-10-os.vercel.app)
+
+### 🟢 CineVault
+* **Problem:** Video watchlist search tools have slow page load and search latencies.
+* **Build:** Vanilla JS application utilizing OMDb API with strict local caching.
+* **Result:** Initial page load under `100ms`, search-to-watchlist action completes in `2 clicks`.
+* [Repo](https://github.com/Shivala-08/cinevault) · [Demo](https://cinevault-eight-red.vercel.app)
 
 <br/>
 
