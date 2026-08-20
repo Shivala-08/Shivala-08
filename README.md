@@ -152,6 +152,7 @@ I built this after manually deploying static sites through repeated clone → bu
 
 **Portfolio / The Skynet**
 ![CI](https://img.shields.io/github/actions/workflow/status/Shivala-08/The-skynet/deploy.yml?style=flat-square&label=CI)
+![License](https://img.shields.io/github/license/Shivala-08/The-skynet?style=flat-square)
 
 </div>
 
