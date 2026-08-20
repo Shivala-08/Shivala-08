@@ -2,8 +2,8 @@
   {
     "name": "Deploy Forge",
     "repo": "Shivala-08/deploy-forge",
-    "description": "CI/CD script: 6 manual deploy steps → 1 command (~80% faster). Bash + Python + Docker.",
-    "tags": ["Docker", "Bash", "Python"],
+    "description": "6 manual deploy steps → 1 dashboard click. Production build completes in ~15s.",
+    "tags": ["Docker", "Next.js", "GitHub Actions"],
     "homepage": "https://deploy-forge-4klc.vercel.app",
     "role": "Solo",
     "status": "live"
@@ -20,7 +20,7 @@
   {
     "name": "Omnitrix OS",
     "repo": "Shivala-08/ben-10-os",
-    "description": "3D Omnitrix UI with Three.js + GSAP. 12 interactive sequences, smooth on mobile.",
+    "description": "3D Omnitrix UI with Three.js + GSAP. 10 aliens, 116fps on deployed build.",
     "tags": ["NextJS", "Three.js", "GSAP"],
     "homepage": "https://ben-10-os.vercel.app",
     "role": "Solo",
@@ -29,7 +29,7 @@
   {
     "name": "Doc Strange",
     "repo": "Shivala-08/doc--strange",
-    "description": "Real-time hand-tracking AR at 30fps in-browser. MediaPipe + Canvas, zero backend.",
+    "description": "Hand-tracking AR filter at 89fps in-browser. MediaPipe + Canvas, zero backend.",
     "tags": ["VanillaJS", "MediaPipe", "Canvas"],
     "homepage": "https://doctor-strange-filter.vercel.app",
     "role": "Solo",

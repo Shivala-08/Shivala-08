@@ -102,12 +102,13 @@ Last activity: <!--LATEST_COMMIT-->No recent activity<!--END_LATEST_COMMIT-->
 
 [![Deploy Forge — open live demo](https://img.shields.io/badge/Try_live_demo-deploy--forge--4klc.vercel.app-0891B2?style=for-the-badge&logo=vercel&logoColor=white)](https://deploy-forge-4klc.vercel.app)
 
+![Build](https://img.shields.io/github/actions/workflow/status/Shivala-08/deploy-forge/ci.yml?style=flat-square&label=CI)
 ![Last Commit](https://img.shields.io/github/last-commit/Shivala-08/deploy-forge?style=flat-square)
 ![License](https://img.shields.io/github/license/Shivala-08/deploy-forge?style=flat-square)
 
 </div>
 
-I built this after manually deploying the same Docker app 20+ times and realizing every deploy took 6 steps and ~4 minutes. Deploy Forge wraps build → push → restart into one command, cutting that to under 45 seconds. Written in Bash + Python because I wanted zero runtime dependencies — next step is adding rollback support.
+I built this after manually deploying static sites through repeated clone → build → commit → push cycles. Deploy Forge replaces that 6-step workflow with one dashboard click; the platform production build completes in ~15s (measured locally). Written in Next.js + GitHub Actions — next step is adding rollback support.
 
 [Read the full writeup →](https://github.com/Shivala-08/deploy-forge#readme)
 
@@ -127,6 +128,27 @@ I built this after manually deploying the same Docker app 20+ times and realizin
 | `Omnitrix OS` | Solo | 🟢 Live | [Repo](https://github.com/Shivala-08/ben-10-os) · [Demo](https://ben-10-os.vercel.app) |
 | `Doc Strange` | Solo | 🟢 Live | [Repo](https://github.com/Shivala-08/doc--strange) · [Demo](https://doctor-strange-filter.vercel.app) |
 | `Portfolio / The Skynet` | Solo | 🟢 Live | [Repo](https://github.com/Shivala-08/The-skynet) · [Demo](https://pallav-os.vercel.app) |
+
+</div>
+
+<!-- ===== PROJECT ENGINEERING BADGES ===== -->
+<div align="center">
+
+**Deploy Forge**
+![CI](https://img.shields.io/github/actions/workflow/status/Shivala-08/deploy-forge/ci.yml?style=flat-square&label=CI)
+![License](https://img.shields.io/github/license/Shivala-08/deploy-forge?style=flat-square)
+
+**CineVault**
+![CI](https://img.shields.io/github/actions/workflow/status/Shivala-08/cinevault/ci.yml?style=flat-square&label=CI)
+![License](https://img.shields.io/github/license/Shivala-08/cinevault?style=flat-square)
+
+**Omnitrix OS**
+![CI](https://img.shields.io/github/actions/workflow/status/Shivala-08/ben-10-os/ci.yml?style=flat-square&label=CI)
+![License](https://img.shields.io/github/license/Shivala-08/ben-10-os?style=flat-square)
+
+**Doc Strange**
+![CI](https://img.shields.io/github/actions/workflow/status/Shivala-08/doc--strange/ci.yml?style=flat-square&label=CI)
+![License](https://img.shields.io/github/license/Shivala-08/doc--strange?style=flat-square)
 
 </div>
 
