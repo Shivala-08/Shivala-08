@@ -6,6 +6,31 @@
   <img alt="Pallav Dholariya" src="https://raw.githubusercontent.com/Shivala-08/Shivala-08/main/light.svg">
 </picture>
 
+<!-- ===== TYPING ANIMATION ===== -->
+<div align="center">
+
+![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&size=20&duration=3000&pause=1000&color=0891B2&background=00000000&center=true&vCenter=true&width=600&lines=AI%2FML+Engineer;Full-Stack+Developer;Currently+shipping+Deploy+Forge)
+
+</div>
+
+<!-- ===== LIVE ACTIVITY ===== -->
+<div align="center">
+
+Last activity: <!--LATEST_COMMIT-->fetching...<!--END_LATEST_COMMIT-->
+
+</div>
+
+<br/>
+
+<!-- ===== TECH STACK / SKILL ICONS ===== -->
+<div align="center">
+
+![Skills](https://skillicons.dev/icons?i=py,js,ts,html,css,react,nextjs,tailwind,fastapi,postgres,supabase,docker,vercel,linux,bash,git,vscode&theme=dark)
+
+</div>
+
+<br/>
+
 <!-- ===== GITHUB STATS ===== -->
 <div align="center">
 
@@ -29,6 +54,23 @@
 
 </div>
 
+<br/>
+
+<!-- ===== 3D CONTRIBUTION GRAPH ===== -->
+<div align="center">
+
+![3D contribution graph](./profile-3d-contrib/profile-night-rainbow.svg)
+
+</div>
+
+<br/>
+
+<!-- ===== WAKATIME STATS ===== -->
+<!--START_SECTION:waka-->
+<!--END_SECTION:waka-->
+
+<br/>
+
 <!-- ===== CONTRIBUTION SNAKE ===== -->
 <div align="center">
 
@@ -42,6 +84,15 @@
 
 <!-- ===== END SNAKE ===== -->
 <br/>
+
+<!-- ===== DAILY QUOTE ===== -->
+<div align="center">
+
+![Quote](https://quotes-github-readme.vercel.app/api?type=vertical&theme=dark)
+
+</div>
+
+<br/>
 <br/>
 
 <!-- ===== FEATURED PROJECTS ===== -->
@@ -51,13 +102,13 @@
 
 <div align="center">
 
-| Project | Links |
-| --- | --- |
-| `Omnitrix OS` | [Repo](https://github.com/Shivala-08/ben-10-os) • [🔗 Live Demo](https://ben-10-os.vercel.app) |
-| `CineVault` | [Repo](https://github.com/Shivala-08/cinevault) • [🔗 Live Demo](https://cinevault-eight-red.vercel.app) |
-| `Deploy Forge` | [Repo](https://github.com/Shivala-08/deploy-forge) • [🔗 Live Demo](https://deploy-forge-4klc.vercel.app) |
-| `Doc Strange` | [Repo](https://github.com/Shivala-08/doc--strange) • [🔗 Live Demo](https://doctor-strange-filter.vercel.app) |
-| `Portfolio / The Skynet` | [Repo](https://github.com/Shivala-08/The-skynet) • [🔗 Live Demo](https://pallav-os.vercel.app) |
+| Project | Demo | Links |
+| --- | --- | --- |
+| `Omnitrix OS` | ![Omnitrix OS demo](https://raw.githubusercontent.com/Shivala-08/ben-10-os/main/assets/demo.gif) | [Repo](https://github.com/Shivala-08/ben-10-os) • [🔗 Live Demo](https://ben-10-os.vercel.app) |
+| `CineVault` | ![CineVault demo](https://raw.githubusercontent.com/Shivala-08/cinevault/main/assets/demo.gif) | [Repo](https://github.com/Shivala-08/cinevault) • [🔗 Live Demo](https://cinevault-eight-red.vercel.app) |
+| `Deploy Forge` | ![Deploy Forge demo](https://raw.githubusercontent.com/Shivala-08/deploy-forge/main/assets/demo.gif) | [Repo](https://github.com/Shivala-08/deploy-forge) • [🔗 Live Demo](https://deploy-forge-4klc.vercel.app) |
+| `Doc Strange` | ![Doc Strange demo](https://raw.githubusercontent.com/Shivala-08/doc--strange/main/assets/demo.gif) | [Repo](https://github.com/Shivala-08/doc--strange) • [🔗 Live Demo](https://doctor-strange-filter.vercel.app) |
+| `Portfolio / The Skynet` | ![Portfolio demo](https://raw.githubusercontent.com/Shivala-08/The-skynet/main/assets/demo.gif) | [Repo](https://github.com/Shivala-08/The-skynet) • [🔗 Live Demo](https://pallav-os.vercel.app) |
 
 </div>
 
