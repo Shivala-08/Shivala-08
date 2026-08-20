@@ -5,15 +5,7 @@
   <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Shivala-08/Shivala-08/main/light.svg">
   <img alt="Pallav Dholariya" src="https://raw.githubusercontent.com/Shivala-08/Shivala-08/main/light.svg">
 </picture>
-
-<!-- ===== TYPING ANIMATION ===== -->
-<div align="center">
-
-![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&size=20&duration=3000&pause=1000&color=0891B2&background=00000000&center=true&vCenter=true&width=600&lines=AI%2FML+Engineer;Full-Stack+Developer;Currently+shipping+Deploy+Forge)
-
-</div>
-
-<br>
+## Identity
 
 <h2 align="center">AI/ML Engineer · Systems Builder</h2>
 
