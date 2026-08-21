@@ -296,10 +296,6 @@ VS Code · Git · Claude Code · Antigravity IDE
 * **Result:** Achieved steady `116fps` render speed on mobile and desktop devices.
 * [Repo](https://github.com/Shivala-08/ben-10-os) · [Demo](https://ben-10-os.vercel.app)
 
-### 💰 Udhaar Ledger
-WhatsApp-based ledger concept for small businesses with AI-assisted payment nudging.
-* [Repo](https://github.com/Shivala-08/udhaar-ledger)
-
 ### 🎬 CineVault
 Full-stack movie discovery application exploring API integration, discovery UX, and scalable frontend patterns.
 * [Repo](https://github.com/Shivala-08/cinevault) · [Demo](https://cinevault-eight-red.vercel.app)
