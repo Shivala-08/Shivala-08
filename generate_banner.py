@@ -24,8 +24,8 @@ from scipy import ndimage
 BANNER_WIDTH = 1180
 BANNER_HEIGHT = 610
 FONT = "ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace"
-PORTRAIT_WIDTH = 300
-PORTRAIT_HEIGHT = 340
+PORTRAIT_WIDTH = 400
+PORTRAIT_HEIGHT = 492
 DOT_SIZE = 3
 
 INTRO_DURATION = 3.2
@@ -163,7 +163,7 @@ def segment_background(img_array):
 def get_logo_coords(logo_path):
     img = Image.open(logo_path).convert("L")
     # Resize to fit nicely within portrait frame centered
-    max_size = 180
+    max_size = 220
     img.thumbnail((max_size, max_size), Image.LANCZOS)
     
     # Place on 300x340 blank background
@@ -316,11 +316,11 @@ def generate_svg(theme="dark"):
     logo2_sorted = sorted(logos_coords[1], key=lambda p: (p[1], p[0]))
     logo3_sorted = sorted(logos_coords[2], key=lambda p: (p[1], p[0]))
     
-    # Scale to SVG space: Portrait starts at translate(50, 86) scale(1.24, 1.4471)
+    # Scale to SVG space: Portrait starts at translate(36, 84) scale(1.0, 1.0)
     # We will output traveller dots directly in main coordinates to animate them smoothly
     travellers_svg = []
-    scale_x, scale_y = 1.2400, 1.4471
-    offset_x, offset_y = 50.0, 86.0
+    scale_x, scale_y = 1.0, 1.0
+    offset_x, offset_y = 36.0, 84.0
     
     # keyTimes uneven: hold portrait 3s (0.21), transition 1.3s (0.288), hold logo 1 2s (0.432)...
     # dur = 13.9s
@@ -380,12 +380,35 @@ def generate_svg(theme="dark"):
     l1_cy = offset_y + (PORTRAIT_HEIGHT / 2) * scale_y
     
     for band_idx, coords in sorted(drift_groups.items()):
-        # Sort coords to create clean path paths
-        d_path = []
+        # Group coordinates by y level to merge horizontally
+        y_coords = {}
         for cx, cy in coords:
-            d_path.append(f"M{cx},{cy}h2.4v1.7h-2.4z")
+            if cy not in y_coords:
+                y_coords[cy] = []
+            y_coords[cy].append(cx)
             
-        d_str = " ".join(d_path)
+        d_segments = []
+        for cy, x_list in sorted(y_coords.items()):
+            x_list = sorted(x_list)
+            if not x_list:
+                continue
+                
+            start_x = x_list[0]
+            current_x = x_list[0]
+            
+            for x in x_list[1:]:
+                if x == current_x + DOT_SIZE:
+                    current_x = x
+                else:
+                    width = (current_x - start_x) + 2.4
+                    d_segments.append(f"M{start_x},{cy}h{width:.1f}v1.7h-{width:.1f}z")
+                    start_x = x
+                    current_x = x
+                    
+            width = (current_x - start_x) + 2.4
+            d_segments.append(f"M{start_x},{cy}h{width:.1f}v1.7h-{width:.1f}z")
+            
+        d_str = " ".join(d_segments)
         
         # Calculate drift translation vector for this band
         # Top bands translate slightly differently from bottom bands
