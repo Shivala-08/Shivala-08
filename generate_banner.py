@@ -161,12 +161,17 @@ def segment_background(img_array):
     return mask
 
 def get_logo_coords(logo_path):
-    img = Image.open(logo_path).convert("L")
+    img = Image.open(logo_path).convert("RGBA")
+    # Paste onto white background to handle transparency correctly
+    canvas = Image.new("RGBA", img.size, (255, 255, 255, 255))
+    canvas.paste(img, (0, 0), mask=img)
+    img = canvas.convert("L")
+    
     # Resize to fit nicely within portrait frame centered
     max_size = 220
     img.thumbnail((max_size, max_size), Image.LANCZOS)
     
-    # Place on 300x340 blank background
+    # Place on 400x492 blank background
     bg = Image.new("L", (PORTRAIT_WIDTH, PORTRAIT_HEIGHT), 255)
     offset_x = (PORTRAIT_WIDTH - img.width) // 2
     offset_y = (PORTRAIT_HEIGHT - img.height) // 2
@@ -276,7 +281,8 @@ def generate_svg(theme="dark"):
     portrait_dots = []
     for y in range(0, PORTRAIT_HEIGHT, DOT_SIZE):
         for x in range(0, PORTRAIT_WIDTH, DOT_SIZE):
-            is_lit = dithered[y, x] == 0  # 0 is dark in Floyd-Steinberg, which represents subject details
+            # For dark mode, draw light highlights (255); for light mode, draw dark shadows (0)
+            is_lit = (dithered[y, x] == 255) if is_dark else (dithered[y, x] == 0)
             is_fg = mask[y, x]
             
             # For dark mode, segment background out
