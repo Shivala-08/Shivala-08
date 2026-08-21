@@ -1,10 +1,11 @@
 <!-- ===== THEME-AWARE HERO BANNER ===== -->
 <!-- GitHub automatically shows dark.svg in dark mode and light.svg in light mode -->
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Shivala-08/Shivala-08/main/dark.svg">
-  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Shivala-08/Shivala-08/main/light.svg">
-  <img alt="Pallav Dholariya" src="https://raw.githubusercontent.com/Shivala-08/Shivala-08/main/light.svg">
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Shivala-08/Shivala-08/main/dark.svg?v=4">
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Shivala-08/Shivala-08/main/light.svg?v=4">
+  <img alt="Pallav Dholariya" src="https://raw.githubusercontent.com/Shivala-08/Shivala-08/main/light.svg?v=4">
 </picture>
+
 ## Identity
 
 <h2 align="center">AI/ML Engineer · Systems Builder</h2>
