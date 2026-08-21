@@ -86,7 +86,7 @@
 <text x="420" y="185" font-family="'SF Mono', monospace" font-size="14">
   <tspan fill="#94A3B8">Education</tspan>
   <tspan fill="#94A3B8" opacity="0.5"> ·· </tspan>
-  <tspan fill="#F8FAFC">B.Tech CSE (AI & ML)</tspan>
+  <tspan fill="#F8FAFC">B.Tech CSE (AI &amp; ML)</tspan>
 </text>
 <text x="420" y="205" font-family="'SF Mono', monospace" font-size="14">
   <tspan fill="#94A3B8">Status</tspan>
