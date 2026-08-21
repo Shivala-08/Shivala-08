@@ -289,7 +289,7 @@ def generate_svg(theme="dark"):
                     portrait_dots.append((x, y))
                     # Select travellers
     random.seed(42)
-    num_travellers = 300
+    num_travellers = 500
     if len(portrait_dots) < num_travellers:
         # Pad portrait dots
         portrait_dots += [(random.randint(0, PORTRAIT_WIDTH), random.randint(0, PORTRAIT_HEIGHT)) for _ in range(num_travellers - len(portrait_dots))]
@@ -326,7 +326,7 @@ def generate_svg(theme="dark"):
     # dur = 13.9s
     # times: 0.0s -> 2.7s (hold), 4.0s (trans), 6.0s (hold), 7.3s (trans), 9.3s (hold), 10.6s (trans), 12.6s (hold), 13.9s (trans)
     key_times = "0;.194;.288;.432;.525;.669;.763;.906;1"
-    opacity_values = "0;0;1;1;1;1;1;1;0"
+    opacity_values = "1;1;1;1;1;1;1;1;1"
     
     for i in range(num_travellers):
         p_x = int(offset_x + travellers_sorted[i][0] * scale_x)
