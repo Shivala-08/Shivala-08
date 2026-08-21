@@ -287,10 +287,9 @@ def generate_svg(theme="dark"):
                 # For light mode, keep the background
                 if is_lit:
                     portrait_dots.append((x, y))
-                    
-    # Select travellers
+                    # Select travellers
     random.seed(42)
-    num_travellers = 900
+    num_travellers = 300
     if len(portrait_dots) < num_travellers:
         # Pad portrait dots
         portrait_dots += [(random.randint(0, PORTRAIT_WIDTH), random.randint(0, PORTRAIT_HEIGHT)) for _ in range(num_travellers - len(portrait_dots))]
@@ -326,36 +325,36 @@ def generate_svg(theme="dark"):
     # keyTimes uneven: hold portrait 3s (0.21), transition 1.3s (0.288), hold logo 1 2s (0.432)...
     # dur = 13.9s
     # times: 0.0s -> 2.7s (hold), 4.0s (trans), 6.0s (hold), 7.3s (trans), 9.3s (hold), 10.6s (trans), 12.6s (hold), 13.9s (trans)
-    key_times = "0.000;0.194;0.288;0.432;0.525;0.669;0.763;0.906;1.000"
+    key_times = "0;.194;.288;.432;.525;.669;.763;.906;1"
     opacity_values = "0;0;1;1;1;1;1;1;0"
     
     for i in range(num_travellers):
-        p_x = offset_x + travellers_sorted[i][0] * scale_x
-        p_y = offset_y + travellers_sorted[i][1] * scale_y
-        l1_x = offset_x + logo1_sorted[i][0] * scale_x
-        l1_y = offset_y + logo1_sorted[i][1] * scale_y
-        l2_x = offset_x + logo2_sorted[i][0] * scale_x
-        l2_y = offset_y + logo2_sorted[i][1] * scale_y
-        l3_x = offset_x + logo3_sorted[i][0] * scale_x
-        l3_y = offset_y + logo3_sorted[i][1] * scale_y
+        p_x = int(offset_x + travellers_sorted[i][0] * scale_x)
+        p_y = int(offset_y + travellers_sorted[i][1] * scale_y)
+        l1_x = int(offset_x + logo1_sorted[i][0] * scale_x)
+        l1_y = int(offset_y + logo1_sorted[i][1] * scale_y)
+        l2_x = int(offset_x + logo2_sorted[i][0] * scale_x)
+        l2_y = int(offset_y + logo2_sorted[i][1] * scale_y)
+        l3_x = int(offset_x + logo3_sorted[i][0] * scale_x)
+        l3_y = int(offset_y + logo3_sorted[i][1] * scale_y)
         
         # Translation path
-        trans_values = f"{p_x:.1f} {p_y:.1f};{p_x:.1f} {p_y:.1f};{l1_x:.1f} {l1_y:.1f};{l1_x:.1f} {l1_y:.1f};{l2_x:.1f} {l2_y:.1f};{l2_x:.1f} {l2_y:.1f};{l3_x:.1f} {l3_y:.1f};{l3_x:.1f} {l3_y:.1f};{p_x:.1f} {p_y:.1f}"
+        trans_values = f"{p_x} {p_y};{p_x} {p_y};{l1_x} {l1_y};{l1_x} {l1_y};{l2_x} {l2_y};{l2_x} {l2_y};{l3_x} {l3_y};{l3_x} {l3_y};{p_x} {p_y}"
         
         travellers_svg.append(
-            f'<use href="#tv{theme}" opacity="0">'
+            f'<use xlink:href="#tv{theme}" opacity="0">'
             f'<animate attributeName="opacity" values="{opacity_values}" keyTimes="{key_times}" dur="{LOOP_DURATION}s" begin="{INTRO_DURATION}s" repeatCount="indefinite"/>'
             f'<animateTransform attributeName="transform" type="translate" values="{trans_values}" keyTimes="{key_times}" dur="{LOOP_DURATION}s" begin="{INTRO_DURATION}s" repeatCount="indefinite"/>'
             f'</use>'
         )
         
-    # Group static portrait dots into 94 drift bands (grouped by Y level + noise)
+    # Group static portrait dots into 45 drift bands (grouped by Y level + noise)
     # The trap: drift is linear so quantize with per-dot noise (sigma ~4) to make it organic
     drift_groups = {}
     for x, y in static_dots:
         noise = random.normalvariate(0, 4)
         band_y = int(y + noise)
-        band_idx = (band_y // 4) % 94  # 94 bands
+        band_idx = (band_y // 8) % 45  # 45 bands
         if band_idx not in drift_groups:
             drift_groups[band_idx] = []
         drift_groups[band_idx].append((x, y))
@@ -372,13 +371,9 @@ def generate_svg(theme="dark"):
     for grp_idx, elements in intro_groups.items():
         if not elements: continue
         begin_time = 0.20 + grp_idx * 0.03
-        
-        # We group by band for the loop animation, but for intro we just do paths inside the group
-        # Actually, let's group by band_idx to apply the loop drift transformation,
-        # but within each band group, we apply the intro opacity.
         pass
         
-    # Let's do it clean: output the 94 drift groups. Each group has a unique translate transform loop
+    # Let's do it clean: output the 45 drift groups. Each group has a unique translate transform loop
     # Timings for loop translation (drift towards Logo 1 centroid while fading)
     # Centroid of Logo 1 in scaled coordinates
     l1_cx = offset_x + (PORTRAIT_WIDTH / 2) * scale_x
@@ -394,7 +389,7 @@ def generate_svg(theme="dark"):
         
         # Calculate drift translation vector for this band
         # Top bands translate slightly differently from bottom bands
-        band_y_centroid = offset_y + (band_idx * (PORTRAIT_HEIGHT / 94)) * scale_y
+        band_y_centroid = offset_y + (band_idx * (PORTRAIT_HEIGHT / 45)) * scale_y
         dy = (l1_cy - band_y_centroid) * 0.42
         dx = (l1_cx - (offset_x + PORTRAIT_WIDTH/2 * scale_x)) * 0.42
         
@@ -418,7 +413,7 @@ def generate_svg(theme="dark"):
     info_panel_svg = build_info_panel(colors)
     
     # Complete SVG build
-    svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="{BANNER_WIDTH}" height="{BANNER_HEIGHT}" viewBox="0 0 {BANNER_WIDTH} {BANNER_HEIGHT}" font-family="{FONT}" role="img" aria-label="Pallav Dholariya — profile.sh --live">
+    svg = f'''<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="{BANNER_WIDTH}" height="{BANNER_HEIGHT}" viewBox="0 0 {BANNER_WIDTH} {BANNER_HEIGHT}" font-family="{FONT}" role="img" aria-label="Pallav Dholariya — profile.sh --live">
 <defs>
 <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
   <stop offset="0" stop-color="#7C3AED"><animate attributeName="stop-color" values="#7C3AED;#22D3EE;#10B981;#7C3AED" dur="10s" repeatCount="indefinite"/></stop>
@@ -440,26 +435,26 @@ def generate_svg(theme="dark"):
 <circle cx="50" cy="25" r="5.5" fill="#ffbd2e"/>
 <circle cx="70" cy="25" r="5.5" fill="#27c93f"/>
 <text x="{BANNER_WIDTH / 2}" y="29" text-anchor="middle" font-size="12" fill="{colors["text_dim"]}">{PERSONAL_INFO["email"]} - % ./profile.sh --live</text>
-
+ 
 <!-- Portrait labels -->
 <text x="38" y="74" font-size="10" letter-spacing="3" fill="{colors["text_dim"]}" opacity="0.75">VISUAL.MAP</text>
 <rect x="36" y="84" width="400" height="492" rx="10" fill="none" stroke="{colors["ui_chrome"]}" stroke-width="2" opacity="0.45" filter="url(#glow3)"/>
 <rect x="36" y="84" width="400" height="492" rx="10" fill="{colors["portrait_bg"]}" stroke="{colors["ui_chrome_dim"]}"/>
-
+ 
 <!-- Portrait static/drift dots -->
 <g transform="translate({offset_x},{offset_y}) scale({scale_x:.4f},{scale_y:.4f})" shape-rendering="crispEdges">
   <set attributeName="opacity" to="0" begin="{INTRO_DURATION}s"/>
   {"\n  ".join(static_svg)}
 </g>
-
+ 
 <!-- Morphing travellers dots -->
 <g shape-rendering="crispEdges">
   {"\n  ".join(travellers_svg)}
 </g>
-
+ 
 <!-- SYSTEM.INFO panel -->
 {info_panel_svg}
-
+ 
 </g>
 <!-- Animated terminal edge glowing border -->
 <rect x="3" y="3" width="{BANNER_WIDTH - 6}" height="{BANNER_HEIGHT - 6}" rx="17" fill="none" stroke="url(#accent)" stroke-width="3" opacity="0.55" filter="url(#glow8)"/>
@@ -467,9 +462,9 @@ def generate_svg(theme="dark"):
 </svg>
 '''
     return svg
-
+ 
 # --- Main Generator ---
-
+ 
 def main():
     print("=" * 60)
     print("  Dithered Portrait Banner Generator")
@@ -482,7 +477,9 @@ def main():
     dark_svg = generate_svg("dark")
     with open("dark.svg", "w", encoding="utf-8") as f:
         f.write(dark_svg)
-    print(f"  ✓ Saved dark.svg ({len(dark_svg):,} bytes)")
+    with open("assets/dark.svg", "w", encoding="utf-8") as f:
+        f.write(dark_svg)
+    print(f"  ✓ Saved dark.svg & assets/dark.svg ({len(dark_svg):,} bytes)")
     print()
     
     # Generate light theme banner
@@ -490,7 +487,9 @@ def main():
     light_svg = generate_svg("light")
     with open("light.svg", "w", encoding="utf-8") as f:
         f.write(light_svg)
-    print(f"  ✓ Saved light.svg ({len(light_svg):,} bytes)")
+    with open("assets/light.svg", "w", encoding="utf-8") as f:
+        f.write(light_svg)
+    print(f"  ✓ Saved light.svg & assets/light.svg ({len(light_svg):,} bytes)")
     print()
     
     print("=" * 60)
