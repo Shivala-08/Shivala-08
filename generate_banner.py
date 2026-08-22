@@ -415,21 +415,14 @@ def generate_svg(theme="dark"):
             
         text_elems = []
         for cy, x_list in sorted(y_coords.items()):
-            x_list = sorted(x_list)
-            if not x_list:
-                continue
-                
-            xs_str = " ".join(str(cx) for cx in x_list)
-            run_chars = []
-            for cx in x_list:
+            for cx in sorted(x_list):
                 h, w = portrait_arr.shape
                 ry = min(max(0, cy), h - 1)
                 rx = min(max(0, cx), w - 1)
                 val = portrait_arr[ry, rx]
-                run_chars.append(get_ascii_char(val, is_dark))
-            run_str = "".join(run_chars)
-            run_str = run_str.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
-            text_elems.append(f'<text x="{xs_str}" y="{cy}" text-anchor="middle" dy="0.3em">{run_str}</text>')
+                char = get_ascii_char(val, is_dark)
+                char = char.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+                text_elems.append(f'<text x="{cx}" y="{cy}" text-anchor="middle" dy="0.3em">{char}</text>')
             
         text_elems_str = "".join(text_elems)
         
