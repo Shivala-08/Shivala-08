@@ -1,9 +1,9 @@
 <!-- ===== THEME-AWARE HERO BANNER ===== -->
 <!-- GitHub automatically shows dark.svg in dark mode and light.svg in light mode -->
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="dark.svg?v=14">
-  <source media="(prefers-color-scheme: light)" srcset="light.svg?v=14">
-  <img alt="Pallav Dholariya" src="light.svg?v=14">
+  <source media="(prefers-color-scheme: dark)" srcset="dark_v3.svg">
+  <source media="(prefers-color-scheme: light)" srcset="light_v3.svg">
+  <img alt="Pallav Dholariya" src="light_v3.svg">
 </picture>
 
 ## Identity

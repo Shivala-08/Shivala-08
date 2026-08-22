@@ -511,28 +511,28 @@ def main():
     print()
     
     # Generate dark theme banner
-    print("[1/2] Generating dark.svg...")
+    print("[1/2] Generating dark_v3.svg...")
     dark_svg = generate_svg("dark")
-    with open("dark.svg", "w", encoding="utf-8") as f:
+    with open("dark_v3.svg", "w", encoding="utf-8") as f:
         f.write(dark_svg)
-    with open("assets/dark.svg", "w", encoding="utf-8") as f:
+    with open("assets/dark_v3.svg", "w", encoding="utf-8") as f:
         f.write(dark_svg)
-    print(f"  ✓ Saved dark.svg & assets/dark.svg ({len(dark_svg):,} bytes)")
+    print(f"  ✓ Saved dark_v3.svg & assets/dark_v3.svg ({len(dark_svg):,} bytes)")
     print()
     
     # Generate light theme banner
-    print("[2/2] Generating light.svg...")
+    print("[2/2] Generating light_v3.svg...")
     light_svg = generate_svg("light")
-    with open("light.svg", "w", encoding="utf-8") as f:
+    with open("light_v3.svg", "w", encoding="utf-8") as f:
         f.write(light_svg)
-    with open("assets/light.svg", "w", encoding="utf-8") as f:
+    with open("assets/light_v3.svg", "w", encoding="utf-8") as f:
         f.write(light_svg)
-    print(f"  ✓ Saved light.svg & assets/light.svg ({len(light_svg):,} bytes)")
+    print(f"  ✓ Saved light_v3.svg & assets/light_v3.svg ({len(light_svg):,} bytes)")
     print()
     
     print("=" * 60)
     print("  Generation complete!")
-    print("  Files: dark.svg, light.svg")
+    print("  Files: dark_v3.svg, light_v3.svg")
     print("=" * 60)
 
 if __name__ == "__main__":
