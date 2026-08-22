@@ -26,7 +26,7 @@ BANNER_HEIGHT = 610
 FONT = "ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace"
 PORTRAIT_WIDTH = 400
 PORTRAIT_HEIGHT = 492
-DOT_SIZE = 3
+DOT_SIZE = 4
 
 INTRO_DURATION = 3.2
 LOOP_DURATION = 13.9
@@ -87,7 +87,7 @@ PERSONAL_INFO = {
 
 # --- ASCII Art Config & Helper ---
 ASCII_RAMP = ["@", "#", "S", "%", "?", "*", "+", ";", ":", ",", "."]
-ASCII_FONT_SIZE = 5.5
+ASCII_FONT_SIZE = 7.0
 
 def get_ascii_char(val, is_dark):
     if is_dark:
