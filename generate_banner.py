@@ -419,29 +419,9 @@ def generate_svg(theme="dark"):
             if not x_list:
                 continue
                 
-            start_x = x_list[0]
-            current_x = x_list[0]
-            
-            for x in x_list[1:]:
-                if x == current_x + DOT_SIZE:
-                    current_x = x
-                else:
-                    run_chars = []
-                    for cx in range(start_x, current_x + DOT_SIZE, DOT_SIZE):
-                        h, w = portrait_arr.shape
-                        ry = min(max(0, cy), h - 1)
-                        rx = min(max(0, cx), w - 1)
-                        val = portrait_arr[ry, rx]
-                        run_chars.append(get_ascii_char(val, is_dark))
-                    run_str = "".join(run_chars)
-                    run_str = run_str.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
-                    text_len = len(run_chars) * DOT_SIZE
-                    text_elems.append(f'<text x="{start_x}" y="{cy + DOT_SIZE - 0.5}" textLength="{text_len}" lengthAdjust="spacingAndGlyphs">{run_str}</text>')
-                    start_x = x
-                    current_x = x
-                    
+            xs_str = " ".join(str(cx) for cx in x_list)
             run_chars = []
-            for cx in range(start_x, current_x + DOT_SIZE, DOT_SIZE):
+            for cx in x_list:
                 h, w = portrait_arr.shape
                 ry = min(max(0, cy), h - 1)
                 rx = min(max(0, cx), w - 1)
@@ -449,8 +429,7 @@ def generate_svg(theme="dark"):
                 run_chars.append(get_ascii_char(val, is_dark))
             run_str = "".join(run_chars)
             run_str = run_str.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
-            text_len = len(run_chars) * DOT_SIZE
-            text_elems.append(f'<text x="{start_x}" y="{cy + DOT_SIZE - 0.5}" textLength="{text_len}" lengthAdjust="spacingAndGlyphs">{run_str}</text>')
+            text_elems.append(f'<text x="{xs_str}" y="{cy}" text-anchor="middle" dy="0.3em">{run_str}</text>')
             
         text_elems_str = "".join(text_elems)
         
@@ -472,7 +451,7 @@ def generate_svg(theme="dark"):
             # Intro shimmer group (staggered fade-in)
             f'<g opacity="0">'
             f'<animate attributeName="opacity" values="0;1" dur="0.9s" begin="{(0.20 + (band_idx % 60) * 0.03):.2f}s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines=".4 0 .2 1"/>'
-            f'<g font-family="{FONT}" font-size="{ASCII_FONT_SIZE}" fill="{colors["portrait_hue"]}">{text_elems_str}</g>'
+            f'<g font-family="{FONT}" font-size="{ASCII_FONT_SIZE}" fill="{colors["portrait_hue"]}" text-rendering="geometricPrecision">{text_elems_str}</g>'
             f'</g></g>'
         )
 
@@ -508,13 +487,13 @@ def generate_svg(theme="dark"):
 <rect x="36" y="84" width="400" height="492" rx="10" fill="{colors["portrait_bg"]}" stroke="{colors["ui_chrome_dim"]}"/>
  
 <!-- Portrait static/drift dots -->
-<g transform="translate({offset_x},{offset_y}) scale({scale_x:.4f},{scale_y:.4f})" shape-rendering="crispEdges">
+<g transform="translate({offset_x},{offset_y}) scale({scale_x:.4f},{scale_y:.4f})">
   <set attributeName="opacity" to="0" begin="{INTRO_DURATION}s"/>
   {"\n  ".join(static_svg)}
 </g>
  
 <!-- Morphing travellers dots -->
-<g shape-rendering="crispEdges" font-family="{FONT}" font-size="{ASCII_FONT_SIZE}" fill="{colors["portrait_hue"]}">
+<g font-family="{FONT}" font-size="{ASCII_FONT_SIZE}" fill="{colors["portrait_hue"]}" text-rendering="geometricPrecision">
   {"\n  ".join(travellers_svg)}
 </g>
  
