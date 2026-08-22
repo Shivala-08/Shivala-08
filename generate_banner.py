@@ -87,7 +87,7 @@ PERSONAL_INFO = {
 
 # --- ASCII Art Config & Helper ---
 ASCII_RAMP = ["@", "#", "S", "%", "?", "*", "+", ";", ":", ",", "."]
-ASCII_FONT_SIZE = 7.0
+ASCII_FONT_SIZE = 4.2
 
 def get_ascii_char(val, is_dark):
     if is_dark:
