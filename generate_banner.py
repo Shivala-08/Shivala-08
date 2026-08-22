@@ -85,6 +85,20 @@ PERSONAL_INFO = {
     "github": "Shivala-08",
 }
 
+# --- ASCII Art Config & Helper ---
+ASCII_RAMP = ["@", "#", "S", "%", "?", "*", "+", ";", ":", ",", "."]
+ASCII_FONT_SIZE = 5.5
+
+def get_ascii_char(val, is_dark):
+    if is_dark:
+        # Dark theme: white (255) is densest (@), black (0) is lightest (.)
+        idx = int((255 - val) / 256 * len(ASCII_RAMP))
+    else:
+        # Light theme: black (0) is densest (@), white (255) is lightest (.)
+        idx = int(val / 256 * len(ASCII_RAMP))
+    idx = min(max(0, idx), len(ASCII_RAMP) - 1)
+    return ASCII_RAMP[idx]
+
 # --- Image Processing Functions ---
 
 def find_best_portrait():
@@ -347,11 +361,17 @@ def generate_svg(theme="dark"):
         # Translation path
         trans_values = f"{p_x} {p_y};{p_x} {p_y};{l1_x} {l1_y};{l1_x} {l1_y};{l2_x} {l2_y};{l2_x} {l2_y};{l3_x} {l3_y};{l3_x} {l3_y};{p_x} {p_y}"
         
+        # Look up corresponding brightness in portrait_arr
+        val = portrait_arr[travellers_sorted[i][1], travellers_sorted[i][0]]
+        char = get_ascii_char(val, is_dark)
+        char = char.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+        
         travellers_svg.append(
-            f'<use xlink:href="#tv{theme}" opacity="0">'
+            f'<text x="0" y="0" text-anchor="middle" dy="0.3em" opacity="0">'
+            f'{char}'
             f'<animate attributeName="opacity" values="{opacity_values}" keyTimes="{key_times}" dur="{LOOP_DURATION}s" begin="{INTRO_DURATION}s" repeatCount="indefinite"/>'
             f'<animateTransform attributeName="transform" type="translate" values="{trans_values}" keyTimes="{key_times}" dur="{LOOP_DURATION}s" begin="{INTRO_DURATION}s" repeatCount="indefinite"/>'
-            f'</use>'
+            f'</text>'
         )
         
     # Group static portrait dots into 45 drift bands (grouped by Y level + noise)
@@ -393,7 +413,7 @@ def generate_svg(theme="dark"):
                 y_coords[cy] = []
             y_coords[cy].append(cx)
             
-        d_segments = []
+        text_elems = []
         for cy, x_list in sorted(y_coords.items()):
             x_list = sorted(x_list)
             if not x_list:
@@ -406,15 +426,33 @@ def generate_svg(theme="dark"):
                 if x == current_x + DOT_SIZE:
                     current_x = x
                 else:
-                    width = (current_x - start_x) + 2.4
-                    d_segments.append(f"M{start_x},{cy}h{width:.1f}v1.7h-{width:.1f}z")
+                    run_chars = []
+                    for cx in range(start_x, current_x + DOT_SIZE, DOT_SIZE):
+                        h, w = portrait_arr.shape
+                        ry = min(max(0, cy), h - 1)
+                        rx = min(max(0, cx), w - 1)
+                        val = portrait_arr[ry, rx]
+                        run_chars.append(get_ascii_char(val, is_dark))
+                    run_str = "".join(run_chars)
+                    run_str = run_str.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+                    text_len = len(run_chars) * DOT_SIZE
+                    text_elems.append(f'<text x="{start_x}" y="{cy + DOT_SIZE - 0.5}" textLength="{text_len}" lengthAdjust="spacingAndGlyphs">{run_str}</text>')
                     start_x = x
                     current_x = x
                     
-            width = (current_x - start_x) + 2.4
-            d_segments.append(f"M{start_x},{cy}h{width:.1f}v1.7h-{width:.1f}z")
+            run_chars = []
+            for cx in range(start_x, current_x + DOT_SIZE, DOT_SIZE):
+                h, w = portrait_arr.shape
+                ry = min(max(0, cy), h - 1)
+                rx = min(max(0, cx), w - 1)
+                val = portrait_arr[ry, rx]
+                run_chars.append(get_ascii_char(val, is_dark))
+            run_str = "".join(run_chars)
+            run_str = run_str.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+            text_len = len(run_chars) * DOT_SIZE
+            text_elems.append(f'<text x="{start_x}" y="{cy + DOT_SIZE - 0.5}" textLength="{text_len}" lengthAdjust="spacingAndGlyphs">{run_str}</text>')
             
-        d_str = " ".join(d_segments)
+        text_elems_str = "".join(text_elems)
         
         # Calculate drift translation vector for this band
         # Top bands translate slightly differently from bottom bands
@@ -434,7 +472,7 @@ def generate_svg(theme="dark"):
             # Intro shimmer group (staggered fade-in)
             f'<g opacity="0">'
             f'<animate attributeName="opacity" values="0;1" dur="0.9s" begin="{(0.20 + (band_idx % 60) * 0.03):.2f}s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines=".4 0 .2 1"/>'
-            f'<path d="{d_str}" fill="{colors["portrait_hue"]}"/>'
+            f'<g font-family="{FONT}" font-size="{ASCII_FONT_SIZE}" fill="{colors["portrait_hue"]}">{text_elems_str}</g>'
             f'</g></g>'
         )
 
@@ -453,7 +491,6 @@ def generate_svg(theme="dark"):
 <filter id="glow8" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="8"/></filter>
 <filter id="glow3" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3"/></filter>
 <clipPath id="winClip"><rect x="2" y="2" width="{BANNER_WIDTH - 4}" height="{BANNER_HEIGHT - 4}" rx="18"/></clipPath>
-<rect id="tv{theme}" width="2.4" height="1.7" fill="{colors["portrait_hue"]}"/>
 </defs>
 <rect x="2" y="2" width="{BANNER_WIDTH - 4}" height="{BANNER_HEIGHT - 4}" rx="18" fill="#070B16"/>
 <g clip-path="url(#winClip)">
@@ -477,7 +514,7 @@ def generate_svg(theme="dark"):
 </g>
  
 <!-- Morphing travellers dots -->
-<g shape-rendering="crispEdges">
+<g shape-rendering="crispEdges" font-family="{FONT}" font-size="{ASCII_FONT_SIZE}" fill="{colors["portrait_hue"]}">
   {"\n  ".join(travellers_svg)}
 </g>
  
