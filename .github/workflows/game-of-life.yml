@@ -1,0 +1,40 @@
+name: Conway's Game of Life Contribution Grid
+on:
+  schedule:
+    - cron: '0 0 * * *'   # daily
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r scripts/game-of-life/requirements.txt
+
+      - name: Fetch contributions
+        working-directory: scripts/game-of-life
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python fetch_contributions.py
+
+      - name: Generate SVG
+        working-directory: scripts/game-of-life
+        run: mkdir -p dist && python render_svg.py
+
+      - name: Commit to output branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -B output
+          git add -f scripts/game-of-life/dist/game-of-life.svg
+          git commit -m "chore: update game of life animation" || echo "No changes"
+          git push -f origin output
