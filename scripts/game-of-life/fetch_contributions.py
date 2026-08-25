@@ -42,7 +42,17 @@ def fetch_contributions():
     weeks = data["data"]["user"]["contributionsCollection"]["contributionCalendar"]["weeks"]
 
     # grid[week][day] = contribution count
-    grid = [[day["contributionCount"] for day in week["contributionDays"]] for week in weeks]
+    grid = []
+    for i, week in enumerate(weeks):
+        days = [day["contributionCount"] for day in week["contributionDays"]]
+        if len(days) < 7:
+            if i == 0:
+                # First week: pad at the start (pre-fill days with 0)
+                days = [0] * (7 - len(days)) + days
+            else:
+                # Last week: pad at the end (post-fill days with 0)
+                days = days + [0] * (7 - len(days))
+        grid.append(days)
 
     with open("contributions.json", "w") as f:
         json.dump(grid, f)
