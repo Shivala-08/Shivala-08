@@ -48,6 +48,17 @@ R_IN = 104          # cage floor; also the inner limit of the sweep annulus
 R_SWEEP_IN = 108
 R_SWEEP_OUT = 152
 R_PLATE = 92        # opaque plate so the headline number never sits on motion
+R_IRIS = 84         # inner iris ring, gives the plate depth without touching the number
+R_GLOW = 124        # core halo; keeps the bloom inside the mid ring
+R_DASH = 120        # counter-rotating dashed ring: mechanical depth, no data meaning
+R_TICK_IN = 159.5   # dial scale sits between the cage and the heat ring
+R_TICK_OUT = 163.5
+R_TICK_MAJOR_IN = 156.5
+R_TICK_MAJOR_OUT = 164.5
+# Emitters start just clear of the plate rim (R_PLATE 92). They must not begin
+# *inside* it: the plate is translucent in dark mode, so an expanding ring would
+# be visible crawling behind the headline number.
+PULSE_IN, PULSE_OUT = 98, 156
 
 # Ramp stops — must match scripts/check_palette.py RAMP_ASSETS (asserted by
 # scripts/test_reactor.py, so the palette gate cannot silently drift from here).
@@ -79,6 +90,9 @@ THEMES = {
         "OP_QUIET": 0.30, "OP_RING_IN": 0.22, "OP_RING_MID": 0.14,
         "OP_SPOKE": 0.20, "OP_CAGE": 0.35, "OP_CAGE_LO": 0.16,
         "OP_PLATE": 0.45, "OP_PLATE_LO": 0.18, "SWEEP": 0.55,
+        "OP_GLOW": 0.16, "OP_DASH": 0.22, "OP_PULSE": 0.40,
+        "OP_TICK": 0.24, "OP_TICK_MAJOR": 0.50, "OP_BOLT": 0.50,
+        "OP_IRIS": 0.18, "OP_CAGE_GLOW": 0.10,
     },
     "light": {
         "BG": "#F8FAFC", "PANEL": "#FFFFFF",
@@ -90,6 +104,11 @@ THEMES = {
         "OP_QUIET": 0.45, "OP_RING_IN": 0.34, "OP_RING_MID": 0.24,
         "OP_SPOKE": 0.30, "OP_CAGE": 0.58, "OP_CAGE_LO": 0.30,
         "OP_PLATE": 0.60, "OP_PLATE_LO": 0.32, "SWEEP": 0.70,
+        # OP_GLOW is the one tier that goes the *other* way: on white a bloom is
+        # a grey smudge, so light mode gets a hint of a halo, not a glow.
+        "OP_GLOW": 0.10, "OP_DASH": 0.30, "OP_PULSE": 0.45,
+        "OP_TICK": 0.32, "OP_TICK_MAJOR": 0.58, "OP_BOLT": 0.62,
+        "OP_IRIS": 0.24, "OP_CAGE_GLOW": 0.14,
     },
 }
 
@@ -162,6 +181,34 @@ def readout(label, value, sub, x, y, anchor, t, gold=False):
         f'fill="{t["GOLD"] if gold else t["TEXT"]}">{value}</text>'
         f'<text x="{x}" y="{y + 40}" text-anchor="{anchor}" font-size="8.5" letter-spacing="0.6" '
         f'fill="{t["SUB"]}">{sub}</text>'
+    )
+
+
+def tick_scale(t, count):
+    """Week-boundary ticks between the cage and the heat ring.
+
+    One tick per week boundary, so the dial is aligned with the data instead of
+    being decoration: every 13th boundary is a longer quarter marker. Emitted as
+    two paths rather than ~57 <line> elements — same geometry, a third of the
+    bytes.
+    """
+    minor, major = [], []
+    for i in range(count):
+        angle = -90 + i * STEP
+        if i % 13 == 0:
+            x0, y0 = polar(R_TICK_MAJOR_IN, angle)
+            x1, y1 = polar(R_TICK_MAJOR_OUT, angle)
+            major.append(f"M {x0:.1f} {y0:.1f} L {x1:.1f} {y1:.1f} ")
+        else:
+            x0, y0 = polar(R_TICK_IN, angle)
+            x1, y1 = polar(R_TICK_OUT, angle)
+            minor.append(f"M {x0:.1f} {y0:.1f} L {x1:.1f} {y1:.1f} ")
+    minor_d, major_d = "".join(minor), "".join(major)
+    return (
+        f'<path d="{minor_d}" fill="none" stroke="{t["MUTED"]}" '
+        f'stroke-opacity="{t["OP_TICK"]:.2f}"/>'
+        f'<path d="{major_d}" fill="none" stroke="{t["MUTED"]}" '
+        f'stroke-opacity="{t["OP_TICK_MAJOR"]:.2f}" stroke-width="1.4"/>'
     )
 
 
@@ -252,21 +299,58 @@ def build(stats, theme):
     a(readout("AVG / ACTIVE WEEK", f"{avg}", "CONTRIBUTIONS", W - 20, 100, "end", t))
     a(readout("LONGEST RUN", f'{int(stats.get("longest_run") or 0)}', "CONSECUTIVE DAYS", W - 20, 176, "end", t))
 
+    # ---- core halo: a radial gradient, not a blur filter (GitHub strips those)
+    a(f'<defs><radialGradient id="core-glow-{theme}">'
+      f'<stop offset="0" stop-color="{t["CYAN"]}" stop-opacity="{t["OP_GLOW"]:.2f}"/>'
+      f'<stop offset="0.55" stop-color="{t["CYAN"]}" stop-opacity="{t["OP_GLOW"] * 0.35:.2f}"/>'
+      f'<stop offset="1" stop-color="{t["CYAN"]}" stop-opacity="0"/>'
+      f'</radialGradient></defs>')
+    a(f'<circle cx="{CX}" cy="{CY}" r="{R_GLOW}" fill="url(#core-glow-{theme})"/>')
+
+    # ---- emitters: two staggered rings marching outwards from the plate rim.
+    # Behind the cage in document order, so they read as coming from inside it.
+    for delay in (0.0, 2.75):
+        a(f'<circle cx="{CX}" cy="{CY}" r="{PULSE_IN}" fill="none" stroke="{t["CYAN"]}" '
+          f'stroke-width="1.2" opacity="0">'
+          f'<animate attributeName="r" values="{PULSE_IN};{PULSE_OUT}" dur="5.5s" '
+          f'begin="{delay}s" repeatCount="indefinite" calcMode="spline" '
+          f'keyTimes="0;1" keySplines="0.15 0 0.55 1"/>'
+          f'<animate attributeName="opacity" values="{t["OP_PULSE"]:.2f};0" dur="5.5s" '
+          f'begin="{delay}s" repeatCount="indefinite"/>'
+          f'</circle>')
+
+    # ---- counter-rotating dashed ring: mechanical depth between floor and mid
+    a(f'<g><animateTransform attributeName="transform" type="rotate" '
+      f'values="360 {CX} {CY};0 {CX} {CY}" dur="80s" repeatCount="indefinite"/>'
+      f'<circle cx="{CX}" cy="{CY}" r="{R_DASH}" fill="none" stroke="{t["MUTED"]}" '
+      f'stroke-opacity="{t["OP_DASH"]:.2f}" stroke-dasharray="2 9"/></g>')
+
     # ---- cage: structural rings + six spokes -------------------------------
     a(f'<circle cx="{CX}" cy="{CY}" r="{R_IN}" fill="none" stroke="{t["MUTED"]}" '
       f'stroke-opacity="{t["OP_RING_IN"]:.2f}"/>')
     a(f'<circle cx="{CX}" cy="{CY}" r="{R_MID}" fill="none" stroke="{t["MUTED"]}" '
       f'stroke-opacity="{t["OP_RING_MID"]:.2f}"/>')
+    # the cage is stroked twice: a wide low-alpha halo under a crisp line, which
+    # is how you get a glow without a filter
+    a(f'<circle cx="{CX}" cy="{CY}" r="{R_CAGE}" fill="none" stroke="{t["CYAN"]}" '
+      f'stroke-width="4" stroke-opacity="{t["OP_CAGE_GLOW"]:.2f}"/>')
     a(f'<circle cx="{CX}" cy="{CY}" r="{R_CAGE}" fill="none" stroke="{t["CYAN"]}" '
       f'stroke-opacity="{t["OP_CAGE"]:.2f}">'
       f'<animate attributeName="stroke-opacity" '
       f'values="{t["OP_CAGE"]:.2f};{t["OP_CAGE_LO"]:.2f};{t["OP_CAGE"]:.2f}" dur="4.5s" '
       f'repeatCount="indefinite"/></circle>')
     for i in range(6):
-        x0, y0 = polar(R_IN, -90 + i * 60)
-        x1, y1 = polar(R_CAGE, -90 + i * 60)
+        angle = -90 + i * 60
+        x0, y0 = polar(R_IN, angle)
+        x1, y1 = polar(R_CAGE, angle)
         a(f'<line x1="{x0:.1f}" y1="{y0:.1f}" x2="{x1:.1f}" y2="{y1:.1f}" '
           f'stroke="{t["MUTED"]}" stroke-opacity="{t["OP_SPOKE"]:.2f}"/>')
+        bx, by = polar(R_CAGE, angle)
+        a(f'<circle cx="{bx:.1f}" cy="{by:.1f}" r="2.2" fill="{t["CYAN"]}" '
+          f'opacity="{t["OP_BOLT"]:.2f}"/>')
+
+    # ---- dial: week-boundary ticks hugging the outside of the cage ----------
+    a(tick_scale(t, len(weeks)))
 
     # ---- sweep: a slow comet rotating inside the cage ----------------------
     trail = [(0.0, sweep, 1.6), (-4.0, sweep * 0.4, 1.3),
@@ -279,6 +363,12 @@ def build(stats, theme):
         a(f'<line x1="{x0:.1f}" y1="{y0:.1f}" x2="{x1:.1f}" y2="{y1:.1f}" stroke="{t["CYAN"]}" '
           f'stroke-opacity="{opacity:.2f}" stroke-width="{width}"/>')
     tx, ty = polar(R_SWEEP_OUT, -90)
+    # tip flare: a small halo that breathes, so the sweep reads as a sensor pass
+    a(f'<circle cx="{tx:.1f}" cy="{ty:.1f}" r="6" fill="none" stroke="{t["CYAN"]}" '
+      f'opacity="0.35">'
+      f'<animate attributeName="r" values="4;9;4" dur="1.6s" repeatCount="indefinite"/>'
+      f'<animate attributeName="opacity" values="0.45;0.12;0.45" dur="1.6s" '
+      f'repeatCount="indefinite"/></circle>')
     a(f'<circle cx="{tx:.1f}" cy="{ty:.1f}" r="3" fill="{t["CYAN"]}" opacity="0.9"/>')
     a('</g>')
 
@@ -308,6 +398,10 @@ def build(stats, theme):
       f'<animate attributeName="stroke-opacity" '
       f'values="{t["OP_PLATE"]:.2f};{t["OP_PLATE_LO"]:.2f};{t["OP_PLATE"]:.2f}" dur="4s" '
       f'repeatCount="indefinite"/></circle>')
+    # iris: an inner ring that gives the plate a rim to sit on. Radially clear of
+    # every text baseline, so the number never fights it.
+    a(f'<circle cx="{CX}" cy="{CY}" r="{R_IRIS}" fill="none" stroke="{t["CYAN"]}" '
+      f'stroke-opacity="{t["OP_IRIS"]:.2f}"/>')
     a(f'<text x="{CX}" y="{CY - 18}" text-anchor="middle" font-size="8" letter-spacing="1.6" '
       f'fill="{t["MUTED"]}">TOTAL CONTRIBUTIONS</text>')
     a(f'<text x="{CX}" y="{CY + 14}" text-anchor="middle" font-size="36" font-weight="700" '

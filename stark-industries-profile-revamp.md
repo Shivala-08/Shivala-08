@@ -124,8 +124,9 @@ could. Two structural fixes only:
 
 ## PHASE 4 — THE TELEMETRY DECK (GitHub Activity: streak, stats, radar, 3D graph)
 
-This is where the palette chaos is worst — three sub-panels, three different accent colours.
-Recolour, don't rebuild the charts themselves:
+> **Amended.** The 3D isometric graph was replaced by a bespoke reactor panel, and the
+> contribution snake was retired. Both were put to the user as questions rather than assumed —
+> see **AMENDMENT A** below for what shipped, why, and what it cost to walk back.
 
 - **Streak/stat row** — already cyan-forward, keep it, just confirm the flame icon on the
   current-streak ring uses gold `#FFC857` instead of orange, so it reads as "this system" and
@@ -141,6 +142,65 @@ Recolour, don't rebuild the charts themselves:
   ramp (cyan at low-activity, gold at peak-activity days) so it visually says "this is the same
   system as the banner," and retint the donut segments to sit within the palette (cyan, gold,
   titanium grey) rather than arbitrary per-language defaults.
+  *Superseded by AMENDMENT A — there was no language donut on that graph, and the graph itself
+  is gone.*
+
+---
+
+## AMENDMENT A — THE REACTOR REPLACES THE 3D GRAPH, THE SNAKE IS RETIRED
+
+Written after the Phase 4 build, because the build changed two decisions that were in it.
+
+**The decision.** The 3D isometric graph was replaced by a bespoke *contribution reactor core*
+panel, and the contribution snake (assembly-order item 6) was dropped. Put to the user as
+questions, not assumed: *replace the 3D graph rather than add a fifth panel; header names the
+instrument, Stark reference lives in a caption line.*
+
+**Why.** The 3D graph is the most template-looking asset on the page — anyone who has looked at
+twenty dev profiles has seen that extruded-cube chart — and its cubes carry no readable volume.
+The snake duplicated the "here is my year" job the Game of Life panel already does, while adding
+a second publishing branch to keep alive. The reactor does the job neither did.
+
+**The gap this filled.** This manual assumed a language donut lived on the 3D graph. It did not —
+that panel was cubes only. So `fetch_reactor.py` pulls language bytes from GitHub's own per-repo
+counts, and the bar is measured rather than hand-listed.
+
+**What it renders.** 53 week arcs on a cyan → gold ramp (graphite for weeks with no activity), a
+gold tick marking the current week, four readouts (peak week with its date range, active weeks,
+average per active week, longest daily run) and the language mix bar. Dark and light are both
+generated.
+
+**Inside the ring**, back to front: a radial-gradient halo; two staggered emitter rings expanding
+from the plate rim to the cage every 5.5s; a dashed ring counter-rotating over 80s; the cage floor
+and mid rings; six spokes ending in bolt dots; the cage itself, stroked twice (a wide low-alpha
+halo under a crisp line — a glow without a filter, which GitHub strips); a 53-tick dial aligned to
+the actual week boundaries, every 13th one longer; the 14s sensor sweep with a breathing tip
+flare, confined to the annulus so motion never crosses the number; then the plate with an inner
+iris ring, and the total on top of it. Emitters deliberately start *outside* the plate radius —
+the plate is translucent in dark mode, so a ring beginning under it would crawl behind the
+headline number.
+
+**Pipeline.** `fetch_reactor.py` (one GraphQL call: contributionCalendar + languages) →
+`reactor.json` → `generate_reactor.py` → `out/reactor.svg` + `out/reactor-light.svg` → published
+to the `projects` branch by `projects.yml`. The palette gate now runs in that workflow: it used to
+live in the deleted 3D workflow, so it would otherwise have died with it.
+
+**Retired with it.** `.github/workflows/3d-contrib.yml`, `.github/scripts/recolor_3d.py`,
+`profile-3d-contrib/` (all ten theme SVGs, including the recoloured night-rainbow one) and
+`.github/workflows/snake.yml`. The remote `snake` branch is now unreferenced and was left alone.
+
+**Two things worth carrying forward.**
+
+1. **A partial week is not a quiet week.** GitHub returns 53 weeks and the last one is usually
+   still running, so it is scaled to a full week for colour. The PEAK WEEK readout keeps the raw
+   total — a week in progress is not a record. A partial *first* week is left alone, because its
+   missing days fall outside the window.
+2. **Light mode is not the dark theme with different hexes.** Cyan and gold are near-complementary,
+   so a straight two-stop ramp collapses chroma to ~23 at mid-scale on white — a muddy sage, which
+   is what "washed out" actually meant. Light routes the ramp through the palette green (chroma
+   holds at 33–47), uses a solid `#F1F5F9` core plate instead of a 1.06:1 cyan wash, and moves
+   small text from `#94A3B8` (2.56:1 on white) to `#64748B` (4.76:1). Every structural alpha is
+   higher on white than on deep space, and `scripts/test_reactor.py` asserts all of it.
 
 ---
 
@@ -195,11 +255,12 @@ otherwise fully-themed page.
 ### 7c. Random dev joke
 Same two-option tradeoff as before — flag it, don't pick silently:
 - **Static badge service** — zero maintenance, refreshes on the service's own cache cycle.
-- **Scheduled GitHub Action** (same pattern as the snake workflow) that rewrites a README block
-  on a cron — more control, more surface area to go stale silently if the Action stops running.
+- **Scheduled GitHub Action** (same pattern as the panels workflow that publishes the radar and
+  the reactor) that rewrites a README block on a cron — more control, more surface area to go
+  stale silently if the Action stops running.
 
-Given this profile already runs a Game-of-Life generation script and a snake workflow, one more
-scheduled Action isn't a stretch operationally — but it's still the user's call, not a default.
+Given this profile already runs Game-of-Life and panel-generation workflows, one more scheduled
+Action isn't a stretch operationally — but it's still the user's call, not a default.
 
 ---
 
@@ -211,8 +272,8 @@ scheduled Action isn't a stretch operationally — but it's still the user's cal
 4. Tech Stack (already in the banner panel per Phase 2.4 — no separate section needed unless the
    user wants the full uncompressed lists spelled out below the banner too; ask rather than
    duplicate)
-5. GitHub Activity: streak / stats / radar / 3D graph (Phase 4)
-6. Contribution snake (unchanged — recolour to match Phase 1 if not already cyan/gold)
+5. GitHub Activity: streak / stats / radar / reactor core (Phase 4, as amended)
+6. ~~Contribution snake~~ — retired, see AMENDMENT A
 7. Game of Life panel (Phase 5)
 8. Coding quote (Phase 7b)
 9. Random dev joke (Phase 7c)

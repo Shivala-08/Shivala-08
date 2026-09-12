@@ -14,5 +14,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Generator behaviour first (partial weeks, empty windows, geometry),
+      # then the palette contract across every committed asset.
+      - name: Run reactor generator tests
+        run: python3 scripts/test_reactor.py
+
       - name: Run palette smoke test
         run: python3 scripts/check_palette.py

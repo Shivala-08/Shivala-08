@@ -12,8 +12,9 @@ Checks
      any build input or generated asset.
   2. Asset allow-list — every colour in a generated SVG must belong to that
      file's theme palette (hex and rgba forms).
-  3. Ramp check — the reactor's week ring is a computed cyan->gold ramp rather
-     than palette hexes, so each rgb() must lie on that segment.
+  3. Ramp check — the reactor's week ring is a computed ramp rather than palette
+     hexes, so each rgb() must lie on that theme's declared ramp stops (dark:
+     cyan->gold, light: cyan->green->gold).
   4. README badge URLs — every colour query parameter must be a palette value.
 
 Docs (`*.md` manuals, guide.md) are deliberately out of scope: they are
@@ -56,6 +57,7 @@ LIGHT = {
     "94A3B8",  # dim tier
     "05060A",  # window frame in light mode
 }
+THEME_ALLOW = {"dark": DARK, "light": LIGHT}
 DIVIDER_DARK = {"00E5FF", "FFC857"}
 DIVIDER_LIGHT = {"0891B2", "A16207"}
 # macOS window chrome in the banner terminal — authentic, not a palette accent.
@@ -85,11 +87,14 @@ LIGHT_ASSETS = [
     "out/radar-light.svg",
     "assets/divider-light.svg",
 ]
-# Ramp assets: path -> (theme, cyan endpoint, gold endpoint). Endpoints mirror
-# .github/scripts/generate_reactor.py and must stay in sync with it.
+# Ramp assets: path -> (theme, stops). A stop list, not a segment: dark walks a
+# straight cyan -> gold line, light routes through the palette green because
+# interpolating cyan straight to gold on white collapses chroma to ~23 (a muddy
+# sage) at mid-scale. Mirrors generate_reactor.py RAMPS; scripts/test_reactor.py
+# asserts the two stay in sync so the gate cannot silently drift from the source.
 RAMP_ASSETS = {
-    "dark": ("out/reactor.svg", (0, 229, 255), (255, 200, 87)),
-    "light": ("out/reactor-light.svg", (8, 145, 178), (161, 98, 7)),
+    "dark": ("out/reactor.svg", ((0, 229, 255), (255, 200, 87))),
+    "light": ("out/reactor-light.svg", ((8, 145, 178), (5, 150, 105), (161, 98, 7))),
 }
 SOURCES = [
     "generate_banner.py",
@@ -181,25 +186,30 @@ def check_asset(path, allowed, failures, report):
     report.append(f"{path}: {len(seen)} palette colours in use")
 
 
-def check_ramp(path, theme, endpoints, failures, report):
+def dist_to_segment(point, a, b):
+    """Shortest distance from an RGB point to an RGB segment."""
+    edge = [b[i] - a[i] for i in range(3)]
+    elen = sum(e * e for e in edge)
+    t = 0.0 if elen == 0 else max(0.0, min(1.0, sum((point[i] - a[i]) * edge[i] for i in range(3)) / elen))
+    return sum((point[i] - (a[i] + t * edge[i])) ** 2 for i in range(3)) ** 0.5
+
+
+def check_ramp(path, theme, stops, failures, report):
     svg = read(path)
-    cyan, gold = endpoints
-    ex, ey = gold[0] - cyan[0], gold[1] - cyan[1]
-    elen = ex * ex + ey * ey
     worst, count = 0.0, 0
     for m in RGB_ANY.finditer(svg):
-        r, g, b = (int(v) for v in m.groups())
+        point = tuple(int(v) for v in m.groups())
         count += 1
-        # distance from (r,g,b) to the cyan->gold segment, in RGB space
-        t = max(0.0, min(1.0, ((r - cyan[0]) * ex + (g - cyan[1]) * ey) / elen))
-        px, py = cyan[0] + t * ex, cyan[1] + t * ey
-        worst = max(worst, ((r - px) ** 2 + (g - py) ** 2 + (b - (cyan[2] + t * (gold[2] - cyan[2]))) ** 2) ** 0.5)
+        # distance from this colour to the nearest point on the ramp polyline
+        worst = max(worst, min(
+            dist_to_segment(point, stops[i], stops[i + 1]) for i in range(len(stops) - 1)
+        ))
     if worst > 6.0:
         failures.append(f"{path}: {count} rgb() week arcs, worst drift {worst:.1f} off the cyan->gold ramp")
     else:
         report.append(f"{path}: {count} rgb() week arcs, max {worst:.1f} off the cyan->gold ramp")
 
-    allowed = {c.upper() for c in (DARK if theme == "dark" else LIGHT)}
+    allowed = {c.upper() for c in THEME_ALLOW[theme]}
     bad = set()
     for token in colors_in(svg):
         if not token or SKIP.match(token) or token.startswith("rgb"):
@@ -257,10 +267,10 @@ def main():
             check_banned(name, read(name), failures, None)
             check_asset(name, palette | TRAFFIC_LIGHTS | (DIVIDER_LIGHT if "divider" in name else set()),
                         failures, report)
-    for theme, (path, cyan, gold) in RAMP_ASSETS.items():
+    for theme, (path, stops) in RAMP_ASSETS.items():
         if os.path.exists(os.path.join(ROOT, path)):
             check_banned(path, read(path), failures, None)
-            check_ramp(path, theme, (cyan, gold), failures, report)
+            check_ramp(path, theme, stops, failures, report)
 
     params = check_readme_params(failures)
 
