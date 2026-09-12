@@ -11,7 +11,8 @@ Generates dark.svg and light.svg with:
 - Info panel with dotted leaders and LIVE badge
 
 Theme: Terminal/Cyberpunk
-Palette: Portrait [#A78BFA dark / #7C3AED light] · UI chrome [#22D3EE / #0891B2] · accent [#10B981] · background [#0A101F]
+Palette: Portrait + chrome [#00E5FF dark / #0891B2 light] · accent [#FFC857 / #A16207] · background [#05060A]
+NOTE: superseded by generate_banner.py (v3) — kept palette-aligned so it cannot regress the profile.
 """
 
 import os
@@ -39,17 +40,17 @@ LOOP_DURATION = 14.2  # seconds
 # Cyberpunk color palette
 COLORS = {
     "dark": {
-        "bg": "#0A101F",
-        "bg_gradient_start": "#0A101F",
-        "bg_gradient_end": "#0F172A",
-        "portrait_hue": "#A78BFA",  # Purple for dots
-        "portrait_bg": "#1E1B4B",  # Dark background for portrait frame
-        "ui_chrome": "#22D3EE",    # Cyan for UI elements
-        "accent": "#10B981",       # Green for accents
-        "live_badge": "#EF4444",   # Red for LIVE badge
+        "bg": "#05060A",
+        "bg_gradient_start": "#05060A",
+        "bg_gradient_end": "#030409",
+        "portrait_hue": "#00E5FF",  # Single-hue dither dots
+        "portrait_bg": "#05060A",  # Portrait frame background
+        "ui_chrome": "#00E5FF",    # Cyan carries structure
+        "accent": "#FFC857",       # Gold carries emphasis
+        "live_badge": "#FFC857",   # Gold reads as "power source"
         "text": "#F8FAFC",
         "text_dim": "#94A3B8",
-        "dot_empty": "#2d3343",    # Visible slate for empty cells
+        "dot_empty": "#1A2230",    # Empty portrait-grid cell tier
         "border": "#334155",
         "terminal_bg": "rgba(15,23,42,0.95)",
     },
@@ -57,11 +58,11 @@ COLORS = {
         "bg": "#F8FAFC",
         "bg_gradient_start": "#F1F5F9",
         "bg_gradient_end": "#E2E8F0",
-        "portrait_hue": "#7C3AED",  # Deeper purple for light mode dots
-        "portrait_bg": "#DDD6FE",  # Light purple background
+        "portrait_hue": "#0891B2",  # Darker cyan for light mode dots
+        "portrait_bg": "#F8FAFC",  # Light background
         "ui_chrome": "#0891B2",    # Darker cyan for light mode
-        "accent": "#059669",       # Darker green
-        "live_badge": "#DC2626",   # Darker red
+        "accent": "#A16207",       # Darker gold
+        "live_badge": "#A16207",   # Darker gold
         "text": "#1E293B",
         "text_dim": "#64748B",
         "dot_empty": "#CBD5E1",    # Light slate for empty cells

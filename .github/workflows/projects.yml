@@ -1,4 +1,4 @@
-name: Generate Projects Panel
+name: Generate Profile Panels
 
 on:
   push:
@@ -7,7 +7,11 @@ on:
       - "projects.json"
       - "logos/**"
       - ".github/scripts/generate_projects.py"
+      - ".github/scripts/generate_radar.py"
+      - ".github/scripts/generate_reactor.py"
       - ".github/scripts/fetch_data.py"
+      - ".github/scripts/fetch_stats.py"
+      - ".github/scripts/fetch_reactor.py"
   schedule:
     - cron: "0 */6 * * *"
   workflow_dispatch:
@@ -27,16 +31,39 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python3 .github/scripts/fetch_data.py
 
+      - name: Fetch contribution stats
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python3 .github/scripts/fetch_stats.py
+
+      # Day-resolution contribution calendar + language bytes. Same token, same
+      # rolling 12-month window as the streak card and the radar.
+      - name: Fetch contribution calendar
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python3 .github/scripts/fetch_reactor.py
+
       - name: Generate projects.svg
         run: |
           mkdir -p out
           python3 .github/scripts/generate_projects.py merged.json out
 
-      - name: Push to projects branch
+      - name: Generate radar.svg
+        run: python3 .github/scripts/generate_radar.py stats.json out
+
+      - name: Generate reactor.svg
+        run: python3 .github/scripts/generate_reactor.py reactor.json out
+
+      # Gate before publishing: this job commits straight to the `projects`
+      # branch the README renders from, so drift must fail here rather than ship.
+      - name: Check palette
+        run: python3 scripts/check_palette.py
+
+      - name: Push panels to projects branch
         uses: crazy-max/ghaction-github-pages@v3.1.0
         with:
           target_branch: projects
           build_dir: out
-          commit_message: "Update projects panel [skip ci]"
+          commit_message: "Update profile panels [skip ci]"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

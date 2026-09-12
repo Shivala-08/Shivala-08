@@ -1,0 +1,16 @@
+# Local OS / editor noise
+.DS_Store
+**/.DS_Store
+
+# Python bytecode
+__pycache__/
+*.pyc
+
+# Local project repos
+_project-repos/
+
+# Generated panel previews and data (CI publishes the SVGs to the `projects` branch)
+out/
+stats.json
+reactor.json
+

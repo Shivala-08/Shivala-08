@@ -29,10 +29,10 @@ def render(frames, out_path="dist/game-of-life.svg"):
         for y in range(cols):
             cell_id = f"c{x}_{y}"
             
-            # Alive = #0891B2 (Teal)
-            # Dead = #0d1117 (Dark Navy)
+            # Alive = #00E5FF (arc-reactor cyan) — Phase 1 palette
+            # Dead  = #05060A (deep space background)
             color_values = [
-                "#0891B2" if frames[t][x][y] else "#0d1117"
+                "#00E5FF" if frames[t][x][y] else "#05060A"
                 for t in range(len(frames))
             ]
             # Match the final keyTime (1.0)
@@ -46,7 +46,7 @@ def render(frames, out_path="dist/game-of-life.svg"):
             # Horizontal coordinate is x (week), vertical coordinate is y (day)
             svg_parts.append(
                 f'<rect id="{cell_id}" x="{x*(CELL_SIZE+GAP)}" y="{y*(CELL_SIZE+GAP)}" '
-                f'width="{CELL_SIZE}" height="{CELL_SIZE}" rx="2" fill="#0d1117">'
+                f'width="{CELL_SIZE}" height="{CELL_SIZE}" rx="2" fill="#05060A">'
                 f'<animate attributeName="fill" values="{values}" '
                 f'dur="{total_duration}s" repeatCount="indefinite" '
                 f'keyTimes="{keyTimes_str}" />'

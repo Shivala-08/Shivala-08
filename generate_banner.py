@@ -4,10 +4,10 @@ Cyberpunk Terminal Profile Banner Generator
 Implements:
 - 1-bit Floyd-Steinberg dithered portrait (serpentine order)
 - Background segmentation for dark mode
-- 60-group interleaved shimmer intro animation (3.2s)
-- 13.9s loop animation:
-  - Static dots grouped into 94 drift bands (with random noise)
-  - 900 travellers morphing between 3 logos (Python, HTML, Bash)
+- 60-group interleaved shimmer intro animation (2.4s)
+- 11.0s loop animation:
+  - Static dots grouped into 45 drift bands (with random noise)
+  - 500 travellers morphing between 3 logos (Python, HTML, Bash)
   - Staggered and locked SYSTEM.INFO text rows with dotted leaders
 """
 
@@ -28,37 +28,46 @@ PORTRAIT_WIDTH = 400
 PORTRAIT_HEIGHT = 492
 DOT_SIZE = 4
 
-INTRO_DURATION = 3.2
-LOOP_DURATION = 13.9
+INTRO_DURATION = 2.4
+LOOP_DURATION = 11.0
 
-# --- Colors (Matching prompt palette exactly) ---
-# Palette: portrait [#A78BFA dark / #7C3AED light] · UI chrome [#22D3EE / #0891B2] · accent [#10B981] · background [#0A101F]
+# --- Colors (single unified palette — see stark-industries-profile-revamp.md Phase 1) ---
+# Background deep space [#05060A] · Arc reactor cyan [#00E5FF / #0891B2] · Repulsor gold [#FFC857 / #A16207]
+# Mark-VII red is reserved for "hot" status chips only, success green stays [#2ED573 / #059669].
 COLORS = {
     "dark": {
-        "bg_start": "#0A101F",
-        "bg_end": "#070B16",
-        "portrait_hue": "#A78BFA",
-        "portrait_bg": "#0A101F",
-        "ui_chrome": "#22D3EE",
-        "ui_chrome_dim": "rgba(34, 211, 238, 0.35)",
-        "accent": "#10B981",
-        "live_badge": "#EF4444",
+        "bg_start": "#05060A",
+        "bg_end": "#030409",
+        "frame": "#030409",
+        "titlebar": "#0A0E16",
+        "barline": "rgba(136,146,166,0.10)",
+        "portrait_hue": "#00E5FF",   # single hue, all tone from dot density
+        "portrait_bg": "#05060A",
+        "ui_chrome": "#00E5FF",      # cyan carries structure
+        "ui_chrome_dim": "rgba(0, 229, 255, 0.35)",
+        "accent": "#FFC857",         # gold carries emphasis
+        "live_badge": "#FFC857",
+        "live_text": "#05060A",
         "text": "#F8FAFC",
-        "text_dim": "#94A3B8",
-        "dot_empty": "#2d3343",  # Visible slate for empty cells
+        "text_dim": "#8892A6",       # titanium grey
+        "dot_empty": "#1A2230",
     },
     "light": {
         "bg_start": "#F8FAFC",
         "bg_end": "#E2E8F0",
-        "portrait_hue": "#7C3AED",
-        "portrait_bg": "#E2E8F0",
+        "frame": "#05060A",
+        "titlebar": "#F1F5F9",
+        "barline": "rgba(100,116,139,0.10)",
+        "portrait_hue": "#0891B2",
+        "portrait_bg": "#F8FAFC",
         "ui_chrome": "#0891B2",
         "ui_chrome_dim": "rgba(8, 145, 178, 0.30)",
-        "accent": "#059669",
-        "live_badge": "#DC2626",
+        "accent": "#A16207",
+        "live_badge": "#A16207",
+        "live_text": "#FFFFFF",
         "text": "#0F172A",
-        "text_dim": "#475569",
-        "dot_empty": "#CBD5E1",  # Light slate for empty cells
+        "text_dim": "#64748B",
+        "dot_empty": "#CBD5E1",
     }
 }
 
@@ -245,7 +254,7 @@ def build_info_panel(colors):
     # SYSTEM.INFO header
     lines.append(f'<g opacity="0"><animate attributeName="opacity" from="0" to="1" dur="0.4s" begin="0.4s" fill="freeze"/><text x="{x}" y="88" font-size="13" letter-spacing="2" fill="{colors["ui_chrome"]}" font-weight="bold">SYSTEM.INFO</text></g>')
     # pulsing red LIVE badge
-    lines.append(f'<g opacity="0"><animate attributeName="opacity" from="0" to="1" dur="0.4s" begin="0.45s" fill="freeze"/><rect x="575" y="76" width="36" height="15" rx="3" fill="{colors["live_badge"]}"/><text x="593" y="87" font-size="10" fill="white" text-anchor="middle" font-weight="bold">LIVE<animate attributeName="fill-opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/></text></g>')
+    lines.append(f'<g opacity="0"><animate attributeName="opacity" from="0" to="1" dur="0.4s" begin="0.45s" fill="freeze"/><rect x="575" y="76" width="36" height="15" rx="3" fill="{colors["live_badge"]}"/><text x="593" y="87" font-size="10" fill="{colors["live_text"]}" text-anchor="middle" font-weight="bold">LIVE<animate attributeName="fill-opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/></text></g>')
     # Handle pill
     lines.append(f'<g opacity="0"><animate attributeName="opacity" from="0" to="1" dur="0.4s" begin="0.5s" fill="freeze"/><rect x="470" y="103" width="130" height="18" rx="4" fill="{colors["ui_chrome"]}" opacity="0.15"/><text x="480" y="116" font-size="13" fill="{colors["ui_chrome"]}" font-weight="bold">@{info["github"]}</text></g>')
     
@@ -267,7 +276,7 @@ def build_info_panel(colors):
             f'<animateTransform attributeName="transform" type="translate" values="-8 0;0 0" dur="0.4s" begin="{stagger:.2f}s" fill="freeze"/>'
             f'<text x="{x}" y="{y}" font-size="{font_size}" textLength="655" lengthAdjust="spacingAndGlyphs" xml:space="preserve">'
             f'<tspan fill="{colors["ui_chrome"]}">{label} </tspan>'
-            f'<tspan fill="rgba(148,163,184,0.35)">{dots}</tspan>'
+            f'<tspan fill="rgba(136,146,166,0.35)">{dots}</tspan>'
             f'<tspan fill="{colors["text"]}" font-weight="600"> {val}</tspan>'
             f'</text></g>'
         )
@@ -342,10 +351,10 @@ def generate_svg(theme="dark"):
     scale_x, scale_y = 1.0, 1.0
     offset_x, offset_y = 36.0, 84.0
     
-    # keyTimes uneven: hold portrait 3s (0.21), transition 1.3s (0.288), hold logo 1 2s (0.432)...
-    # dur = 13.9s
-    # times: 0.0s -> 2.7s (hold), 4.0s (trans), 6.0s (hold), 7.3s (trans), 9.3s (hold), 10.6s (trans), 12.6s (hold), 13.9s (trans)
-    key_times = "0;.194;.288;.432;.525;.669;.763;.906;1"
+    # Loop choreography — timings are deliberately tighter than the first pass
+    # (2.7s/2.0s/3.2s intro read as sluggish for a hero image):
+    #   hold portrait 2.0s · each morph 1.2s · each logo hold 1.4s  = 11.0s
+    key_times = "0;.1818;.2909;.4182;.5273;.6545;.7636;.8909;1"
     opacity_values = "1;1;1;1;1;1;1;1;1"
     
     for i in range(num_travellers):
@@ -455,20 +464,20 @@ def generate_svg(theme="dark"):
     svg = f'''<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="{BANNER_WIDTH}" height="{BANNER_HEIGHT}" viewBox="0 0 {BANNER_WIDTH} {BANNER_HEIGHT}" font-family="{FONT}" role="img" aria-label="Pallav Dholariya — profile.sh --live">
 <defs>
 <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
-  <stop offset="0" stop-color="#7C3AED"><animate attributeName="stop-color" values="#7C3AED;#22D3EE;#10B981;#7C3AED" dur="10s" repeatCount="indefinite"/></stop>
-  <stop offset="0.5" stop-color="#22D3EE"><animate attributeName="stop-color" values="#22D3EE;#10B981;#7C3AED;#22D3EE" dur="10s" repeatCount="indefinite"/></stop>
-  <stop offset="1" stop-color="#10B981"><animate attributeName="stop-color" values="#10B981;#7C3AED;#22D3EE;#10B981" dur="10s" repeatCount="indefinite"/></stop>
+  <stop offset="0" stop-color="{colors["ui_chrome"]}"><animate attributeName="stop-color" values="{colors["ui_chrome"]};{colors["accent"]};{colors["ui_chrome"]}" dur="10s" repeatCount="indefinite"/></stop>
+  <stop offset="0.5" stop-color="{colors["accent"]}"><animate attributeName="stop-color" values="{colors["accent"]};{colors["ui_chrome"]};{colors["accent"]}" dur="10s" repeatCount="indefinite"/></stop>
+  <stop offset="1" stop-color="{colors["ui_chrome"]}"><animate attributeName="stop-color" values="{colors["ui_chrome"]};{colors["accent"]};{colors["ui_chrome"]}" dur="10s" repeatCount="indefinite"/></stop>
 </linearGradient>
 <linearGradient id="panelGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="{colors["bg_start"]}"/><stop offset="1" stop-color="{colors["bg_end"]}"/></linearGradient>
 <filter id="glow8" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="8"/></filter>
 <filter id="glow3" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3"/></filter>
 <clipPath id="winClip"><rect x="2" y="2" width="{BANNER_WIDTH - 4}" height="{BANNER_HEIGHT - 4}" rx="18"/></clipPath>
 </defs>
-<rect x="2" y="2" width="{BANNER_WIDTH - 4}" height="{BANNER_HEIGHT - 4}" rx="18" fill="#070B16"/>
+<rect x="2" y="2" width="{BANNER_WIDTH - 4}" height="{BANNER_HEIGHT - 4}" rx="18" fill="{colors["frame"]}"/>
 <g clip-path="url(#winClip)">
 <rect x="2" y="2" width="{BANNER_WIDTH - 4}" height="{BANNER_HEIGHT - 4}" fill="url(#panelGrad)"/>
-<rect x="2" y="2" width="{BANNER_WIDTH - 4}" height="46" fill="#0B1222"/>
-<line x1="2" y1="48" x2="{BANNER_WIDTH - 2}" y2="48" stroke="rgba(255,255,255,0.10)"/>
+<rect x="2" y="2" width="{BANNER_WIDTH - 4}" height="46" fill="{colors["titlebar"]}"/>
+<line x1="2" y1="48" x2="{BANNER_WIDTH - 2}" y2="48" stroke="{colors["barline"]}"/>
 <circle cx="30" cy="25" r="5.5" fill="#ff5f56"/>
 <circle cx="50" cy="25" r="5.5" fill="#ffbd2e"/>
 <circle cx="70" cy="25" r="5.5" fill="#27c93f"/>
@@ -481,7 +490,6 @@ def generate_svg(theme="dark"):
  
 <!-- Portrait static/drift dots -->
 <g transform="translate({offset_x},{offset_y}) scale({scale_x:.4f},{scale_y:.4f})">
-  <set attributeName="opacity" to="0" begin="{INTRO_DURATION}s"/>
   {"\n  ".join(static_svg)}
 </g>
  

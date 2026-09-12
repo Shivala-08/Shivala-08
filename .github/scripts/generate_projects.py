@@ -6,8 +6,10 @@ Reads projects.json (user curated) + live GitHub data merged by the workflow.
 One SVG, 2-column grid of mini terminal cards. Add/remove/reorder projects by
 editing projects.json — the README never changes.
 
-Theme: matches the profile banner (navy #0A101F, cyan #22D3EE, violet #A78BFA,
-emerald #10B981, mono font, dotted leaders, pulsing dots, animated accents).
+Theme: one unified palette, shared with the profile banner (deep space #05060A,
+arc-reactor cyan #00E5FF, repulsor gold #FFC857, success green #2ED573, titanium
+grey #8892A6, mono font, dotted leaders, pulsing dots, animated accents).
+Cyan carries structure, gold carries emphasis, green/red carry state only.
 """
 import json, base64, os, sys, math, html
 from datetime import datetime, timezone
@@ -15,30 +17,33 @@ from datetime import datetime, timezone
 # ---------------- themes ----------------
 THEMES = {
     "dark": {
-        "BG": "#0A101F", "PANEL": "#0C1426", "PANEL_BAR": "#0B1222",
-        "CYAN": "#22D3EE", "VIOLET": "#A78BFA", "VIOLET2": "#7C3AED",
-        "EMERALD": "#10B981", "TEXT": "#F8FAFC", "MUTED": "#94A3B8",
-        "DIM": "#475569",
-        "STROKE": "rgba(34,211,238,0.28)", "STROKE_HI": "rgba(34,211,238,0.5)",
-        "STROKE_LO": "rgba(34,211,238,0.22)", "BARLINE": "rgba(255,255,255,0.08)",
-        "RING_BG": "rgba(148,163,184,0.15)", "PILL_BG": "rgba(124,58,237,0.28)",
-        "PILL_STROKE": "rgba(167,139,250,0.5)", "MONO_TX": "#EDE9FE",
+        "BG": "#05060A", "PANEL": "#080C14", "PANEL_BAR": "#0A0E16",
+        "CYAN": "#00E5FF", "GOLD": "#FFC857", "TILE": "#00E5FF",
+        "EMERALD": "#2ED573", "TEXT": "#F8FAFC", "MUTED": "#8892A6",
+        "DIM": "#4E5868",
+        "STROKE": "rgba(0,229,255,0.28)", "STROKE_HI": "rgba(0,229,255,0.5)",
+        "STROKE_LO": "rgba(0,229,255,0.22)", "BARLINE": "rgba(136,146,166,0.08)",
+        "RING_BG": "rgba(136,146,166,0.15)", "PILL_BG": "rgba(0,229,255,0.10)",
+        "PILL_STROKE": "rgba(0,229,255,0.45)", "MONO_TX": "#05060A",
+        "LIVE_STROKE": "rgba(46,213,115,0.45)", "WIP_STROKE": "rgba(255,200,87,0.45)",
     },
     "light": {
         "BG": "#F8FAFC", "PANEL": "#FFFFFF", "PANEL_BAR": "#F1F5F9",
-        "CYAN": "#0891B2", "VIOLET": "#7C3AED", "VIOLET2": "#7C3AED",
-        "EMERALD": "#059669", "TEXT": "#0F172A", "MUTED": "#475569",
+        "CYAN": "#0891B2", "GOLD": "#A16207", "TILE": "#0891B2",
+        "EMERALD": "#059669", "TEXT": "#0F172A", "MUTED": "#64748B",
         "DIM": "#94A3B8",
         "STROKE": "rgba(8,145,178,0.30)", "STROKE_HI": "rgba(8,145,178,0.55)",
-        "STROKE_LO": "rgba(8,145,178,0.20)", "BARLINE": "rgba(0,0,0,0.08)",
-        "RING_BG": "rgba(100,116,139,0.20)", "PILL_BG": "rgba(124,58,237,0.12)",
-        "PILL_STROKE": "rgba(124,58,237,0.4)", "MONO_TX": "#FFFFFF",
+        "STROKE_LO": "rgba(8,145,178,0.20)", "BARLINE": "rgba(100,116,139,0.08)",
+        "RING_BG": "rgba(100,116,139,0.20)", "PILL_BG": "rgba(8,145,178,0.06)",
+        "PILL_STROKE": "rgba(8,145,178,0.40)", "MONO_TX": "#FFFFFF",
+        "LIVE_STROKE": "rgba(5,150,105,0.45)", "WIP_STROKE": "rgba(161,98,7,0.45)",
     },
 }
 
 # active palette — set by set_theme(); defaults to dark
-BG = PANEL = PANEL_BAR = CYAN = VIOLET = VIOLET2 = EMERALD = TEXT = MUTED = DIM = None
+BG = PANEL = PANEL_BAR = CYAN = GOLD = TILE = EMERALD = TEXT = MUTED = DIM = None
 STROKE = STROKE_HI = STROKE_LO = BARLINE = RING_BG = PILL_BG = PILL_STROKE = MONO_TX = None
+LIVE_STROKE = WIP_STROKE = None
 DONUT_COLORS = []
 
 def set_theme(name):
@@ -46,7 +51,7 @@ def set_theme(name):
     g = globals()
     for k, v in t.items():
         g[k] = v
-    g["DONUT_COLORS"] = [t["VIOLET"], t["CYAN"], t["EMERALD"], "#6366F1", "#64748B", "#94A3B8"]
+    g["DONUT_COLORS"] = [t["CYAN"], t["GOLD"], t["EMERALD"], t["MUTED"], t["DIM"]]
 
 set_theme("dark")
 
@@ -106,8 +111,8 @@ def status_badge(p, x, y, begin):
     role = esc(p.get("role") or "Solo")
     live = status == "live"
     label = "LIVE" if live else "WIP"
-    fill = EMERALD if live else "#EAB308"
-    stroke = "rgba(16,185,129,0.45)" if live else "rgba(234,179,8,0.45)"
+    fill = EMERALD if live else GOLD
+    stroke = LIVE_STROKE if live else WIP_STROKE
     e = []
     a = e.append
     a(f'<g opacity="0">')
@@ -170,7 +175,7 @@ def card(p, x, y, idx):
         a(f'<g>{float_anim}<image x="16" y="44" width="40" height="40" href="{logo}" preserveAspectRatio="xMidYMid meet"/></g>')
     else:
         initial = esc((p.get("name") or "?")[0].upper())
-        a(f'<g>{float_anim}<rect x="16" y="44" width="40" height="40" rx="9" fill="{VIOLET2}" opacity="0.9"/>'
+        a(f'<g>{float_anim}<rect x="16" y="44" width="40" height="40" rx="9" fill="{TILE}" opacity="0.9"/>'
           f'<text x="36" y="71" text-anchor="middle" font-size="20" font-weight="700" fill="{MONO_TX}">{initial}</text></g>')
 
     # name + blinking cursor
@@ -188,13 +193,13 @@ def card(p, x, y, idx):
     for tag in (p.get("tags") or [])[:3]:
         tw = len(tag) * 6.6 + 14
         a(f'<rect x="{tx}" y="118" width="{tw:.0f}" height="17" rx="8.5" fill="{PILL_BG}" stroke="{PILL_STROKE}"/>')
-        a(f'<text x="{tx + tw/2:.0f}" y="130" text-anchor="middle" font-size="9.5" fill="{VIOLET}">{esc(tag)}</text>')
+        a(f'<text x="{tx + tw/2:.0f}" y="130" text-anchor="middle" font-size="9.5" fill="{CYAN}">{esc(tag)}</text>')
         tx += tw + 7
 
     # bottom row: stars + updated
     stars = p.get("stars", 0)
     a(f'<text x="68" y="155" font-size="11" fill="{MUTED}">'
-      f'<tspan fill="{CYAN}">&#9733;</tspan> {stars}'
+      f'<tspan fill="{GOLD}">&#9733;</tspan> {stars}'
       f'<tspan fill="{DIM}" dx="14">updated {rel_time(p.get("pushed_at"))}</tspan></text>')
 
     # status + role badge (replaces language-percentage donut)
@@ -214,8 +219,8 @@ def build(projects, theme="dark"):
     a(f'<rect width="{W}" height="{H}" fill="{BG}"/>')
     # animated accent gradient (same as banner)
     a(f'<defs><linearGradient id="{gid}" x1="0" y1="0" x2="1" y2="0">'
-      f'<stop offset="0" stop-color="{VIOLET2}"><animate attributeName="stop-color" values="{VIOLET2};{CYAN};{EMERALD};{VIOLET2}" dur="10s" repeatCount="indefinite"/></stop>'
-      f'<stop offset="1" stop-color="{EMERALD}"><animate attributeName="stop-color" values="{EMERALD};{VIOLET2};{CYAN};{EMERALD}" dur="10s" repeatCount="indefinite"/></stop>'
+      f'<stop offset="0" stop-color="{CYAN}"><animate attributeName="stop-color" values="{CYAN};{GOLD};{CYAN}" dur="10s" repeatCount="indefinite"/></stop>'
+      f'<stop offset="1" stop-color="{GOLD}"><animate attributeName="stop-color" values="{GOLD};{CYAN};{GOLD}" dur="10s" repeatCount="indefinite"/></stop>'
       '</linearGradient></defs>')
     # header: matches SYSTEM.INFO styling
     a(f'<text x="{MARGIN+2}" y="18" font-size="11" letter-spacing="2" fill="{CYAN}">PROJECTS.LIST</text>')
