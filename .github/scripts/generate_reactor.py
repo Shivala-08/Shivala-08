@@ -16,11 +16,17 @@ are plain graphite. On top of that it adds numbers the old graph never showed
 mix, so everything in it is data rather than decoration.
 
 Palette rules (Phase 1) are respected literally: every paint token is either a
-palette hex (with alpha carried in a separate opacity attribute) or a computed
-rgb() on the theme's cyan -> gold ramp, which is exactly what
-scripts/check_palette.py verifies before this file is published.
+palette hex or a computed rgb() on that theme's cyan -> gold ramp, with alpha
+carried in a separate opacity attribute. scripts/check_palette.py verifies both
+before this file is published.
 
 The Stark reference stays in the caption line. The header names the instrument.
+
+Light mode is not the dark theme with different hexes. On deep space the accents
+are luminous, so structure can sit at 20-35% alpha. On white that same alpha
+disappears (a 0.22 titanium ring measures 1.32:1 against #FFFFFF), so every
+structural and text tier below is tuned per theme and measured against the
+surface it actually sits on — see the comments on THEMES.
 """
 import datetime
 import html
@@ -43,28 +49,52 @@ R_SWEEP_IN = 108
 R_SWEEP_OUT = 152
 R_PLATE = 92        # opaque plate so the headline number never sits on motion
 
-# ramp endpoints — must match scripts/check_palette.py
+# Ramp stops — must match scripts/check_palette.py RAMP_ASSETS (asserted by
+# scripts/test_reactor.py, so the palette gate cannot silently drift from here).
+#
+# Dark is a straight two-stop cyan -> gold segment. Light cannot be: cyan and
+# gold are near-complementary, so interpolating between them on a light surface
+# collapses chroma to ~23 at mid-scale (a muddy sage at 47.6 L*), which is what
+# "washed out" actually was. Routing the light ramp through the palette's own
+# green holds chroma at 33-47 across the whole path while staying cyan -> gold
+# at the ends. All three stops are Phase 1 palette colours.
 RAMPS = {
     "dark": ((0, 229, 255), (255, 200, 87)),
-    "light": ((8, 145, 178), (161, 98, 7)),
+    "light": ((8, 145, 178), (5, 150, 105), (161, 98, 7)),
 }
 
+# Opacities are floats and get formatted at the point of use. Every value below
+# is the result of measuring the composited colour against its own surface; the
+# dark column is the original tuning, the light column is tuned for #FFFFFF.
+# SUB is the small-text tier: light's #94A3B8 dim grey measures 2.56:1 on white
+# — below legibility for 9px text — so light uses titanium #64748B (4.76:1).
 THEMES = {
     "dark": {
         "BG": "#05060A", "PANEL": "#080C14",
         "CYAN": "#00E5FF", "GOLD": "#FFC857", "GREEN": "#2ED573",
         "MUTED": "#8892A6", "DIM": "#4E5868", "TEXT": "#F8FAFC",
+        "SUB": "#4E5868",                       # 2.72:1 on the panel
+        "QUIET": "#4E5868",                     # quiet weeks — 1.24:1, deliberately recessive
         "PLATE": "rgba(0,229,255,0.06)",
+        "OP_QUIET": 0.30, "OP_RING_IN": 0.22, "OP_RING_MID": 0.14,
+        "OP_SPOKE": 0.20, "OP_CAGE": 0.35, "OP_CAGE_LO": 0.16,
+        "OP_PLATE": 0.45, "OP_PLATE_LO": 0.18, "SWEEP": 0.55,
     },
     "light": {
         "BG": "#F8FAFC", "PANEL": "#FFFFFF",
         "CYAN": "#0891B2", "GOLD": "#A16207", "GREEN": "#059669",
         "MUTED": "#64748B", "DIM": "#94A3B8", "TEXT": "#0F172A",
-        "PLATE": "rgba(8,145,178,0.05)",
+        "SUB": "#64748B",                       # 4.76:1 on white
+        "QUIET": "#64748B",                     # quiet weeks — visible on white, still recessive
+        "PLATE": "#F1F5F9",                     # a real surface, not a 1.06:1 wash
+        "OP_QUIET": 0.45, "OP_RING_IN": 0.34, "OP_RING_MID": 0.24,
+        "OP_SPOKE": 0.30, "OP_CAGE": 0.58, "OP_CAGE_LO": 0.30,
+        "OP_PLATE": 0.60, "OP_PLATE_LO": 0.32, "SWEEP": 0.70,
     },
 }
 
-# axis colours for the language bar — palette only, never GitHub's brand colours
+# Language-bar segments are large areas, so the recessive tiers can sit lower
+# than the text tiers above. Palette colours only, never GitHub's brand colours.
 BAR_COLORS = ("CYAN", "GOLD", "GREEN", "MUTED", "DIM")
 STEP = 360.0 / 53.0
 
@@ -74,10 +104,14 @@ def esc(s):
 
 
 def ramp(t, theme):
-    """Point on the theme's cyan -> gold segment, clamped to [0, 1]."""
-    (r0, g0, b0), (r1, g1, b1) = RAMPS[theme]
+    """Point on that theme's ramp, walked as a polyline and clamped to [0, 1]."""
+    stops = RAMPS[theme]
+    spans = len(stops) - 1
     t = max(0.0, min(1.0, t))
-    return f"rgb({round(r0 + (r1 - r0) * t)},{round(g0 + (g1 - g0) * t)},{round(b0 + (b1 - b0) * t)})"
+    seg = min(int(t * spans), spans - 1)
+    local = (t - seg / spans) * spans
+    a, b = stops[seg], stops[seg + 1]
+    return "rgb({},{},{})".format(*[round(a[i] + (b[i] - a[i]) * local) for i in range(3)])
 
 
 def polar(radius, deg):
@@ -127,7 +161,7 @@ def readout(label, value, sub, x, y, anchor, t, gold=False):
         f'<text x="{x}" y="{y + 26}" text-anchor="{anchor}" font-size="22" font-weight="700" '
         f'fill="{t["GOLD"] if gold else t["TEXT"]}">{value}</text>'
         f'<text x="{x}" y="{y + 40}" text-anchor="{anchor}" font-size="8.5" letter-spacing="0.6" '
-        f'fill="{t["DIM"]}">{sub}</text>'
+        f'fill="{t["SUB"]}">{sub}</text>'
     )
 
 
@@ -146,7 +180,7 @@ def language_bar(langs, t):
     a = e.append
     a(f'<text x="{x0}" y="{y - 10}" font-size="9" letter-spacing="1.2" fill="{t["MUTED"]}">LANGUAGE MIX</text>')
     a(f'<text x="{W - x0}" y="{y - 10}" text-anchor="end" font-size="9" letter-spacing="1.2" '
-      f'fill="{t["DIM"]}">MEASURED BYTES · {len(langs)} LANGUAGES</text>')
+      f'fill="{t["SUB"]}">MEASURED BYTES · {len(langs)} LANGUAGES</text>')
     a(f'<rect x="{x0}" y="{y}" width="{w}" height="{h}" rx="6" fill="{t["PLATE"]}"/>')
 
     cursor = float(x0)
@@ -186,6 +220,7 @@ def build(stats, theme):
     langs = stats.get("languages") or {}
     window = esc(stats.get("window", "last 12 months")).upper()
     since = (weeks[0].get("start") or "")
+    sweep = t["SWEEP"]
 
     s = []
     a = s.append
@@ -199,7 +234,7 @@ def build(stats, theme):
 
     # ---- header: instrument name, invocation, window ------------------------
     a(f'<text x="18" y="22" font-size="11" letter-spacing="2" fill="{t["CYAN"]}">CONTRIBUTION.CORE</text>')
-    a(f'<text x="180" y="22" font-size="10" fill="{t["DIM"]}">$ ./reactor.sh --window=12mo</text>')
+    a(f'<text x="180" y="22" font-size="10" fill="{t["SUB"]}">$ ./reactor.sh --window=12mo</text>')
     a(f'<text x="{W - 18}" y="22" text-anchor="end" font-size="10" fill="{t["MUTED"]}">'
       f'{len(weeks)} WEEKS · {window}</text>')
     a(f'<line x1="0" y1="34" x2="{W}" y2="34" stroke="{t["MUTED"]}" stroke-opacity="0.08"/>')
@@ -207,7 +242,7 @@ def build(stats, theme):
     # ---- caption line: the Stark reference lives here, not in the title -----
     a(f'<text x="18" y="54" font-size="9.5" letter-spacing="0.8" fill="{t["MUTED"]}">'
       f'Stark Industries · Mk IV arc core</text>')
-    a(f'<text x="{W - 18}" y="54" text-anchor="end" font-size="9.5" letter-spacing="0.8" fill="{t["DIM"]}">'
+    a(f'<text x="{W - 18}" y="54" text-anchor="end" font-size="9.5" letter-spacing="0.8" fill="{t["SUB"]}">'
       f'gold tick = current week · ramp cyan → gold</text>')
 
     # ---- readouts ----------------------------------------------------------
@@ -218,26 +253,31 @@ def build(stats, theme):
     a(readout("LONGEST RUN", f'{int(stats.get("longest_run") or 0)}', "CONSECUTIVE DAYS", W - 20, 176, "end", t))
 
     # ---- cage: structural rings + six spokes -------------------------------
-    a(f'<circle cx="{CX}" cy="{CY}" r="{R_IN}" fill="none" stroke="{t["MUTED"]}" stroke-opacity="0.22"/>')
-    a(f'<circle cx="{CX}" cy="{CY}" r="{R_MID}" fill="none" stroke="{t["MUTED"]}" stroke-opacity="0.14"/>')
-    a(f'<circle cx="{CX}" cy="{CY}" r="{R_CAGE}" fill="none" stroke="{t["CYAN"]}" stroke-opacity="0.35">'
-      f'<animate attributeName="stroke-opacity" values="0.35;0.16;0.35" dur="4.5s" repeatCount="indefinite"/>'
-      f'</circle>')
+    a(f'<circle cx="{CX}" cy="{CY}" r="{R_IN}" fill="none" stroke="{t["MUTED"]}" '
+      f'stroke-opacity="{t["OP_RING_IN"]:.2f}"/>')
+    a(f'<circle cx="{CX}" cy="{CY}" r="{R_MID}" fill="none" stroke="{t["MUTED"]}" '
+      f'stroke-opacity="{t["OP_RING_MID"]:.2f}"/>')
+    a(f'<circle cx="{CX}" cy="{CY}" r="{R_CAGE}" fill="none" stroke="{t["CYAN"]}" '
+      f'stroke-opacity="{t["OP_CAGE"]:.2f}">'
+      f'<animate attributeName="stroke-opacity" '
+      f'values="{t["OP_CAGE"]:.2f};{t["OP_CAGE_LO"]:.2f};{t["OP_CAGE"]:.2f}" dur="4.5s" '
+      f'repeatCount="indefinite"/></circle>')
     for i in range(6):
         x0, y0 = polar(R_IN, -90 + i * 60)
         x1, y1 = polar(R_CAGE, -90 + i * 60)
         a(f'<line x1="{x0:.1f}" y1="{y0:.1f}" x2="{x1:.1f}" y2="{y1:.1f}" '
-          f'stroke="{t["MUTED"]}" stroke-opacity="0.20"/>')
+          f'stroke="{t["MUTED"]}" stroke-opacity="{t["OP_SPOKE"]:.2f}"/>')
 
     # ---- sweep: a slow comet rotating inside the cage ----------------------
-    trail = [(0, 0.55, 1.6), (-4.0, 0.22, 1.3), (-8.0, 0.13, 1.1), (-12.5, 0.07, 0.9)]
+    trail = [(0.0, sweep, 1.6), (-4.0, sweep * 0.4, 1.3),
+             (-8.0, sweep * 0.24, 1.1), (-12.5, sweep * 0.13, 0.9)]
     a(f'<g><animateTransform attributeName="transform" type="rotate" '
       f'values="0 {CX} {CY};360 {CX} {CY}" dur="14s" repeatCount="indefinite"/>')
     for offset, opacity, width in trail:
         x0, y0 = polar(R_SWEEP_IN, -90 + offset)
         x1, y1 = polar(R_SWEEP_OUT, -90 + offset)
         a(f'<line x1="{x0:.1f}" y1="{y0:.1f}" x2="{x1:.1f}" y2="{y1:.1f}" stroke="{t["CYAN"]}" '
-          f'stroke-opacity="{opacity}" stroke-width="{width}"/>')
+          f'stroke-opacity="{opacity:.2f}" stroke-width="{width}"/>')
     tx, ty = polar(R_SWEEP_OUT, -90)
     a(f'<circle cx="{tx:.1f}" cy="{ty:.1f}" r="3" fill="{t["CYAN"]}" opacity="0.9"/>')
     a('</g>')
@@ -247,8 +287,8 @@ def build(stats, theme):
         a0 = -90 + i * STEP + BAND_GAP / 2
         a1 = -90 + (i + 1) * STEP - BAND_GAP / 2
         if raw[i] <= 0:
-            a(f'<path d="{arc(R_BAND, a0, a1)}" fill="none" stroke="{t["DIM"]}" '
-              f'stroke-opacity="0.30" stroke-width="{BAND_W}"/>')
+            a(f'<path d="{arc(R_BAND, a0, a1)}" fill="none" stroke="{t["QUIET"]}" '
+              f'stroke-opacity="{t["OP_QUIET"]:.2f}" stroke-width="{BAND_W}"/>')
             continue
         a(f'<path d="{arc(R_BAND, a0, a1)}" fill="none" stroke="{ramp(value / denom, theme)}" '
           f'stroke-width="{BAND_W}"/>')
@@ -264,15 +304,16 @@ def build(stats, theme):
 
     # ---- core plate: the one number worth emphasising ----------------------
     a(f'<circle cx="{CX}" cy="{CY}" r="{R_PLATE}" fill="{t["PLATE"]}" stroke="{t["CYAN"]}" '
-      f'stroke-opacity="0.45" stroke-width="2">'
-      f'<animate attributeName="stroke-opacity" values="0.45;0.18;0.45" dur="4s" repeatCount="indefinite"/>'
-      f'</circle>')
+      f'stroke-opacity="{t["OP_PLATE"]:.2f}" stroke-width="2">'
+      f'<animate attributeName="stroke-opacity" '
+      f'values="{t["OP_PLATE"]:.2f};{t["OP_PLATE_LO"]:.2f};{t["OP_PLATE"]:.2f}" dur="4s" '
+      f'repeatCount="indefinite"/></circle>')
     a(f'<text x="{CX}" y="{CY - 18}" text-anchor="middle" font-size="8" letter-spacing="1.6" '
       f'fill="{t["MUTED"]}">TOTAL CONTRIBUTIONS</text>')
     a(f'<text x="{CX}" y="{CY + 14}" text-anchor="middle" font-size="36" font-weight="700" '
       f'fill="{t["GOLD"]}">{total:,}</text>')
     a(f'<text x="{CX}" y="{CY + 36}" text-anchor="middle" font-size="8" letter-spacing="1" '
-      f'fill="{t["DIM"]}">SINCE {esc(since)}</text>')
+      f'fill="{t["SUB"]}">SINCE {esc(since)}</text>')
 
     # ---- language mix ------------------------------------------------------
     a(language_bar(langs, t))
