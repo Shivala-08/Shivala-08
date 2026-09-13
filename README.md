@@ -290,10 +290,6 @@ VS Code · Git · Claude Code · Antigravity IDE
 <br>
 
 <!-- ===== CONWAY'S GAME OF LIFE ===== -->
-<code>$ ./life.sh --seed=contributions --generations=20</code>
-
-<br><br>
-
 <img src="https://raw.githubusercontent.com/Shivala-08/Shivala-08/output/scripts/game-of-life/dist/game-of-life.svg" alt="Contribution grid — Conway's Game of Life" />
 
 </div>
