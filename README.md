@@ -49,6 +49,7 @@
 |---|---|
 | 🚀 Deploy Forge | Git-backed deployment infrastructure |
 | 🌐 The Skynet | Custom WebGL + performance engineering |
+| 🧩 Context Transfer | macOS menu bar · portable LLM context cards |
 
 > Building → measuring → breaking → fixing → shipping.
 
@@ -62,6 +63,7 @@
 |---|---|---:|
 | The Skynet | 3D renderer bundle | **883 KB → 24.9 KB** |
 | Deploy Forge | Local production build | **~15s** |
+| Context Transfer | Token compression | **18.4k → 2.1k tokens · 89% smaller** |
 
 
 <br>
@@ -156,6 +158,52 @@ Mouse Drag / Scroll Input
 * **Status:** `🟢 PRODUCTION`
 * [View Source](https://github.com/Shivala-08/The-skynet) · [Live Demo](https://pallav-os.vercel.app)
 * [Performance Docs](https://github.com/Shivala-08/The-skynet/blob/main/docs/performance.md) · [Rendering Docs](https://github.com/Shivala-08/The-skynet/blob/main/docs/RENDERING.md)
+
+<br>
+
+---
+
+## 🧩 Context Transfer — Portable Context for Any AI Conversation
+
+A native macOS menu bar app that turns any LLM or application conversation into a portable context card you can paste into a new session to resume work. Menu-bar only (no Dock icon), zero third-party dependencies — SwiftUI + AppKit with `URLSession` for all HTTP.
+
+### Why I Built It
+Starting a new AI session means re-explaining the whole problem: the goal, every decision made so far, the constraints, the current state. It's lost the moment you close the window. Context Transfer makes that context portable — select the conversation in any app (browser, editor, chat, notes), press `⌘⇧X`, and swap it for a structured card with **Goal**, **Key Decisions**, **Constraints & Preferences**, **Current State**, **Resources & Links** (copied verbatim), and **Open Questions** — tight bullets meant as the first message in a fresh session.
+
+### Capture Flow
+```text
+Select text in any app
+        │
+        ▼
+⌘⇧X  ── global hotkey, re-recordable, collision-checked
+        │
+        ▼
+[CaptureService]
+ - exclusion-list check first (never captures from 1Password / Keychain Access)
+ - save clipboard; read selected text via Accessibility API, else synthetic ⌘C
+ - poll NSPasteboard changeCount every ~20ms (≤500ms) — no fixed sleeps
+ - restore original clipboard after extraction
+        │
+        ▼
+[ExtractionBackend]  ── Ollama (local, default, 8K window)  ── or  ──  Anthropic claude-sonnet-4-6 (key in Keychain)
+        │   structured card; validation: malformed output retried once, then flagged
+        ▼
+[Floating non-activating panel]  ── near cursor; Esc / click-away / Copy
+        │   18.4k → 2.1k tokens · 89% smaller
+        ▼
+Paste into a new session
+```
+
+### Engineering Details & Tradeoffs
+* **Clipboard-safe capture:** a flat 100–150ms sleep after a synthetic copy is a guess — slow apps silently leave stale clipboard content, fast apps waste time. The hotkey instead polls `NSPasteboard.changeCount` every ~20ms for up to ~500ms and only proceeds when the copy actually lands, then restores the original clipboard (`string` + `changeCount`).
+* **Silent hotkey collisions:** `NSEvent`'s global monitor doesn't fail loudly when another app already owns a combo — it just never fires, which looks like a silent bug. Mitigated with an unusual default (`⌘⇧X`), a re-recordable picker, and a "Test hotkey" check in Settings.
+* **Sandbox tradeoff:** synthesizing `Cmd+C` via `CGEvent` and hosting a global hotkey monitor both require capabilities App Sandbox blocks — so the app ships sandbox-disabled (the same distribution model as Raycast/Alfred), and must be Developer ID-signed + notarized rather than distributed via the Mac App Store. A signed `.dmg` is planned.
+* **Two interchangeable backends:** a single `ExtractionBackend` protocol with two implementations — **local Ollama** (default: private, free, explicit 8K context window) and **cloud Anthropic** (`claude-sonnet-4-6`, API key stored in the macOS Keychain). Data transmits only when a cloud backend is explicitly configured.
+* **Measured result:** every capture reports original vs. card token estimate (`~4` chars/token heuristic); Full / Balanced / Minimal compression levels control how much survives — e.g. **18.4k → 2.1k tokens · 89% smaller**.
+
+* **Status:** `🟢 PRODUCTION`
+* [View Source](https://github.com/Shivala-08/context-shifter) · [Site](https://context-transfer.vercel.app)
+* [PRD](https://github.com/Shivala-08/context-shifter/blob/main/docs/PRD.md) · [TRD](https://github.com/Shivala-08/context-shifter/blob/main/docs/TRD-v2.md) · [Build Manual](https://github.com/Shivala-08/context-shifter/blob/main/docs/BUILD_MANUAL-v2.md) · [Release Notes](https://github.com/Shivala-08/context-shifter/blob/main/docs/RELEASE_NOTES_v0.1.0.md)
 
 <br>
 
