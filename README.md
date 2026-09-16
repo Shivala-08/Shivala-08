@@ -47,7 +47,6 @@
 
 | Project | Focus |
 |---|---|
-| 🧠 Synapse | AI / retrieval / experimentation |
 | 🚀 Deploy Forge | Git-backed deployment infrastructure |
 | 🌐 The Skynet | Custom WebGL + performance engineering |
 
@@ -63,9 +62,7 @@
 |---|---|---:|
 | The Skynet | 3D renderer bundle | **883 KB → 24.9 KB** |
 | Deploy Forge | Local production build | **~15s** |
-| Synapse | Retrieval benchmark | **62.5% Accuracy** |
 
-* Synapse evaluation: 62.5% retrieval accuracy, 0.875 Recall@5, 0.667 MRR, and 207 ms query latency on a 40-question ground-truth dataset (LLM-disabled, local SentenceTransformer sandbox).
 
 <br>
 
@@ -159,44 +156,6 @@ Mouse Drag / Scroll Input
 * **Status:** `🟢 PRODUCTION`
 * [View Source](https://github.com/Shivala-08/The-skynet) · [Live Demo](https://pallav-os.vercel.app)
 * [Performance Docs](https://github.com/Shivala-08/The-skynet/blob/main/docs/performance.md) · [Rendering Docs](https://github.com/Shivala-08/The-skynet/blob/main/docs/RENDERING.md)
-
-<br>
-
----
-
-## 🧠 Synapse — Knowledge Intelligence Engine
-
-A personal R&D project exploring **hybrid retrieval, knowledge-graph-augmented RAG, and adaptive complexity model routing**.
-
-### System Architecture
-```text
-           User Query
-                │
-                ▼
-        [Semantic Cache] ── Cache Hit ──► Immediate Response (196ms)
-                │ Cache Miss
-                ▼
-     [Complexity Classifier]
-                │
-                ├─────► Fast Path ────► Llama 3.1 8B (Low Latency)
-                │
-                └─► Deep Reasoning ───► Nemotron 3 Ultra 550B (High Budget)
-                        ▲
-                        │ Context Injection
-                ┌───────┴───────┐
-                │  Hybrid Search│ (Vector Store + NetworkX Graph)
-                └───────────────┘
-```
-
-### Retrieval Evaluation
-To measure retrieval quality without LLM bias, Synapse contains a deterministic ablation harness. Running across a 40-question ground-truth set showed that adding a cross-encoder re-ranker was the single largest accuracy contributor (+11 points) but introduced a **200ms** latency penalty.
-
-### Failure Modes
-* **Multi-Hop Synthesis:** Chunks are retrieved based on independent semantic similarity. Questions requiring cross-document synthesis (e.g. comparing two different circulars) frequently fail semantic match criteria when evaluated with the LLM disabled.
-
-* **Status:** `🟡 ACTIVE DEVELOPMENT`
-* [View Source](https://github.com/Shivala-08/synapse)
-* [Evaluation Docs](https://github.com/Shivala-08/synapse/blob/main/docs/evaluation.md)
 
 <br>
 
@@ -330,6 +289,7 @@ VS Code · Git · Claude Code · Antigravity IDE
 | `The Skynet` | Solo | 🟢 Live | [Repo](https://github.com/Shivala-08/The-skynet) · [🔗 Live Demo](https://pallav-os.vercel.app) |
 | `Omnitrix OS` | Solo | 🟢 Live | [Repo](https://github.com/Shivala-08/ben-10-os) · [🔗 Live Demo](https://ben-10-os.vercel.app) |
 | `CineVault` | Solo | 🟢 Live | [Repo](https://github.com/Shivala-08/cinevault) · [🔗 Live Demo](https://cinevault-eight-red.vercel.app) |
+| `Context Transfer_` | Solo | 🟢 Live | [Repo](https://github.com/Shivala-08/context-shifter) · [🔗 Site](https://context-transfer.vercel.app) |
 
 </div>
 

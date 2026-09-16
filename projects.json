@@ -34,5 +34,14 @@
     "homepage": "https://cinevault-eight-red.vercel.app",
     "role": "Solo",
     "status": "live"
+  },
+  {
+    "name": "Context Transfer_",
+    "repo": "Shivala-08/context-shifter",
+    "description": "18.4k → 2.1k tokens · 89% smaller — resume any AI chat in a new session.",
+    "tags": ["Swift", "SwiftUI", "Ollama"],
+    "homepage": "https://context-transfer.vercel.app",
+    "role": "Solo",
+    "status": "live"
   }
 ]
